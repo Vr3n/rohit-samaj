@@ -6,6 +6,11 @@ from django.utils import timezone
 
 class Country(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    iso = models.CharField(max_length=100, unique=True)
+    nicename = models.CharField(max_length=100)
+    iso3 = models.CharField(max_length=100)
+    numcode = models.CharField(max_length=100)
+    phone_code = models.PositiveIntegerField()
 
     def __str__(self) -> str:
         return self.name

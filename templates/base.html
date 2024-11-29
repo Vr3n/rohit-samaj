@@ -1,4 +1,6 @@
-{% load compress %} {% load static %}
+{% load static %}
+<!-- -->
+{% load compress %} 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,11 +10,11 @@
     <title>Rohit Samaj</title>
     <script
       defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+        src="{% static 'vendors/alpine.min.js' %}"
     ></script>
 
     {% compress css %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %} " />
+      <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     {% endcompress %}
   </head>
   <body>
@@ -21,12 +23,12 @@
       <!-- comment-->
       {% endblock content %}
     </main>
-    <script
-      src="https://unpkg.com/htmx.org@2.0.3"
-      integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
-    <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js"></script>
+    <script src="{% static 'vendors/flowbite.min.js' %}"></script>
+    <script src="{% static 'vendors/htmx.min.js' %}"></script>
+    <script src="{% static 'vendors/just-validate.min.js' %}"></script>
+
+    {% block custom_js %}
+    <!-- write your custom js scripts here. -->
+    {% endblock custom_js %}
   </body>
 </html>

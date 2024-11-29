@@ -1,0 +1,10 @@
+<c-form.select
+  name="perm_district"
+  label="District"
+  default_selected="Choose a District"
+  required
+>
+  {% for district in districts %}
+    <option value="{{ district.id }}">{{ district.name }}</option>
+  {% endfor %}
+</c-form.select>

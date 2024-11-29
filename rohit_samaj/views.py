@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.http import HttpRequest, HttpResponsePermanentRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import reverse
 
 from survey.forms import AcceptTermsForm

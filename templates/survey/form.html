@@ -58,9 +58,9 @@
   </c-card>
 
   <!-- Address Details -->
-  <c-card>
+  <c-card x-data="{ is_perm_same: false }">
     <h2 class="text-xl mb-4">Address Details</h2>
-    <h4 class="text-md font-medium">Permanent Address</h4>
+    <h4 class="text-md font-semibold">Permanent Address</h4>
     <div class="grid grid-cols-2 gap-4">
       <!-- Inputs -->
       <div>
@@ -82,10 +82,16 @@
       <div>
         <c-form.select
           label="Country"
-          default_selected="Choose a country"
           name="perm_country"
           required
         >
+          {% for country in countries %}
+            {% if country.id == 1 %}
+              <option value="{{ country.id }}" selected>{{ country.name }}</option>
+            {% else %}
+              <option value="{{ country.id }}">{{ country.name }}</option>
+            {% endif %}
+          {% endfor %}
         </c-form.select>
       </div>
       <div>
@@ -93,11 +99,16 @@
           name="perm_state"
           label="State"
           default_selected="Choose a State"
+          hx-get="{% url 'survey:hx_district_select' %}"
+          hx-target="#district_select"
           required
         >
+          {% for state in states %}
+              <option value="{{ state.id }}">{{ state.name }}</option>
+          {% endfor %}
         </c-form.select>
       </div>
-      <div>
+      <div id="district_select">
         <c-form.select
           name="perm_district"
           label="District"
@@ -129,77 +140,92 @@
       <input
         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
         type="checkbox"
-        name=""
+        x-model="is_perm_same"
+        name="is_address_same"
         id="is_permanent"
         x-model="checked_1"
       />
       <label for="is_permanent">Are Both address same? </label>
     </div>
 
-    <h4 class="text-md font-medium">Correspondant Address</h4>
-    <div class="grid grid-cols-2 gap-4">
-      <!-- Inputs -->
-      <div>
-        <c-form.input
-          label="Flat Number / Building / Bungalow"
-          placeholder="a/202 ABC building"
-          name="corr_flat_no_building"
-          required
-        />
+    <span x-show="!is_perm_same">
+      <h4 class="text-md font-semibold">Correspondant Address</h4>
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Inputs -->
+        <div>
+          <c-form.input
+           label="Flat Number / Building / Bungalow"
+           placeholder="a/202 ABC building"
+           name="corr_flat_no_building"
+           required
+           />
+        </div>
+        <div>
+          <c-form.input
+           label="Street / Landmark"
+           placeholder="xyz nagar"
+           name="corr_street_landmark"
+           required
+           />
+        </div>
+        <div>
+          <c-form.select
+           label="Country"
+           name="corr_country"
+           default_selected="Choose a country"
+           required
+           >
+           {% for country in countries %}
+           {% if country.id == 1 %}
+           <option value="{{ country.id }}" selected>{{ country.name }}</option>
+           {% else %}
+           <option value="{{ country.id }}">{{ country.name }}</option>
+           {% endif %}
+           {% endfor %}
+          </c-form.select>
+        </div>
+        <div>
+          <c-form.select
+                   name="corr_state"
+                   label="State"
+                   hx-get="{% url 'survey:hx_corr_district_select' %}"
+                   hx-target="#corr_district_select"
+                   default_selected="Choose a State"
+                   required
+                   >
+                   {% for state in states %}
+                   <option value="{{ state.id }}">{{ state.name }}</option>
+                   {% endfor %}
+          </c-form.select>
+        </div>
+        <div id="corr_district_select">
+          <c-form.select
+             name="corr_district"
+             label="District"
+             default_selected="Choose a District"
+             required
+             >
+          </c-form.select>
+        </div>
+        <div>
+          <c-form.input
+             label="City"
+             name="corr_city"
+             placeholder="virar west or east"
+             required
+             />
+        </div>
+        <div>
+          <c-form.input
+             label="Pincode"
+             name="corr_pincode"
+             placeholder="000000"
+             required
+             />
+        </div>
+        <!-- End Inputs -->
       </div>
-      <div>
-        <c-form.input
-          label="Street / Landmark"
-          placeholder="xyz nagar"
-          name="corr_street_landmark"
-          required
-        />
-      </div>
-      <div>
-        <c-form.select
-          label="Country"
-          name="corr_country"
-          default_selected="Choose a country"
-          required
-        >
-        </c-form.select>
-      </div>
-      <div>
-        <c-form.select
-          name="corr_state"
-          label="State"
-          default_selected="Choose a State"
-          required
-        >
-        </c-form.select>
-      </div>
-      <div>
-        <c-form.select
-          name="corr_district"
-          label="District"
-          default_selected="Choose a District"
-          required
-        >
-        </c-form.select>
-      </div>
-      <div>
-        <c-form.input
-          label="City"
-          name="corr_city"
-          placeholder="virar west or east"
-          required
-        />
-      </div>
-      <div>
-        <c-form.input
-          label="Pincode"
-          name="corr_pincode"
-          placeholder="000000"
-          required
-        />
-      </div>
-      <!-- End Inputs -->
-    </div>
+    </span>
   </c-card>
   <c-card>
     <h2 class="text-xl mb-4">Educational Qualification Details</h2>
@@ -269,3 +295,4 @@
   <c-button.primary class="w-full" type="submit">Submit</c-button.primary>
 </form>
 {% endblock content %}
+
