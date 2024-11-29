@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+<!-- -->
+{% block content %}
+
+<h2 class="text-xl text-center lg:text-2xl">Shree Rohit Seva Sangh, Mumbai</h2>
+
+<section class="flex flex-col gap-2">
+  <c-card>
+    <h4>The Gujarati Hindu Rohit Samaj Survey.</h4>
+
+    <ul>
+      <li>
+        We are conducting this survey to gain deeper insights into the Rohit
+        Samaj Community.
+      </li>
+      <li>
+        Our aim is to understand the professional and educational landscape
+        within our community, especially focusing on the youth.
+      </li>
+      <li>
+        By identifying strengths in various fields and occupations, we hope to
+        build a supportive network that will benefit our youth in finding jobs,
+        mentorship, and guidance.
+      </li>
+      <li>
+        This survey will also help us connect older members of the community,
+        fostering connections among those who live in close proximity. Through
+        these efforts, we seek to build a stronger, more connected community for
+        mutual growth and support.
+      </li>
+    </ul>
+  </c-card>
+
+  <c-card>
+    <h4>Terms and Conditions</h4>
+    <ul>
+      <li>
+        This survey is conducted solely for the purpose of gathering information
+        to benefit the <strong>Gujarati Hindu Rohit Samaj Community</strong>.
+      </li>
+      <li>
+        All responses are voluntary, and you may choose to skip questions that
+        you do not wish to answer.
+      </li>
+      <li>
+        Your personal data will be treated with strict confidentiality and will
+        not be shared publicly without your consent.
+      </li>
+      <li>
+        Data collected will be used to create insights and connections within
+        the community, potentially aiding in professional and social networking.
+      </li>
+      <li>
+        By participating in this survey, you agree to allow the organizers to
+        use the information provided to develop resources for community
+        betterment.
+      </li>
+      <li>
+        Participants should provide accurate information to ensure the
+        effectiveness of the survey outcomes.
+      </li>
+      <li>
+        The organizers reserve the right to update these terms as needed. Any
+        changes will be communicated accordingly.
+      </li>
+    </ul>
+    <form
+      class="mt-2"
+      action="{% url 'accept_terms' %}"
+      method="post"
+      x-data="{ 'checked_1': false,'checked': false }"
+    >
+      {% csrf_token %}
+      <div class="mb-2">
+        <c-card class="bg-yellow-100/25">
+          <p>
+            <strong>Important:</strong> This survey is exclusively for members
+            of the <strong>Gujarati Hindu Rohit community</strong>. Please do
+            not fill out the form if you are not part of this community.
+          </p>
+        </c-card>
+        <input
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          type="checkbox"
+          name="caste_terms"
+          id="caste_terms"
+          x-model="checked_1"
+        />
+        <label for="caste_terms">
+          I confirm that I am a
+          <strong>Gujarati Hindu Rohit</strong>.
+          <span class="text-red-700">*</span>
+        </label>
+      </div>
+      <div class="mb-2">
+        <input
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="checkbox"
+          name="accept_terms"
+          id="accept_terms"
+          x-model="checked"
+        />
+        <label for="accept_terms">
+          I have read and accept the terms and conditions.
+          <span class="text-red-700">*</span>
+        </label>
+      </div>
+      <span x-show="checked && checked_1">
+        <c-button.primary type="submit">Submit</c-button.primary>
+      </span>
+      <span x-show="!checked || !checked_1">
+        <c-button.disabled>Submit</c-button.disabled>
+      </span>
+    </form>
+  </c-card>
+</section>
+
+{% endblock content %}

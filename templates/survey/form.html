@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+<!-- -->
+{% block content %}
+
+<h2 class="text-xl text-center lg:text-2xl">Shree Rohit Seva Sangh, Mumbai</h2>
+
+<form action="#" method="post" class="space-y-4">
+  <!-- Personal Details -->
+  <c-card>
+    <h2 class="text-xl mb-4">Personal Details</h2>
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Inputs -->
+      <div>
+        <c-form.input label="First Name" name="first_name" required />
+      </div>
+      <div>
+        <c-form.input label="Last Name" name="last_name" required />
+      </div>
+      <div>
+        <c-form.input label="Father Name" name="father_name" />
+      </div>
+      <div>
+        <c-form.input label="Mother Name" name="mother_name" />
+      </div>
+      <div>
+        <c-form.input label="Guardian Name" name="guardian_name" />
+      </div>
+      <p class="w-full col-span-2">
+        * If you're unable to provide your mother’s or father’s name, kindly
+        enter your guardian’s name instead. We understand and appreciate your
+        circumstances.
+      </p>
+      <!-- End Inputs -->
+    </div>
+  </c-card>
+  <!-- Contact Details -->
+  <c-card>
+    <h2 class="text-xl mb-4">Contact Details</h2>
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Inputs -->
+      <div>
+        <c-form.input label="Mobile Number" name="mobile_number" required />
+      </div>
+      <div>
+        <c-form.input label="Email" name="email" />
+      </div>
+      <div>
+        <c-form.input
+          label="Alternate Mobile Number"
+          name="alternate_mobile_number"
+        />
+      </div>
+      <div>
+        <c-form.input label="Alternate Email" name="alternate_email" />
+      </div>
+      <!-- End Inputs -->
+    </div>
+  </c-card>
+
+  <!-- Address Details -->
+  <c-card>
+    <h2 class="text-xl mb-4">Address Details</h2>
+    <h4 class="text-md font-medium">Permanent Address</h4>
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Inputs -->
+      <div>
+        <c-form.input
+          label="Flat Number / Building / Bungalow"
+          placeholder="a/202 ABC building"
+          name="perm_flat_no_building"
+          required
+        />
+      </div>
+      <div>
+        <c-form.input
+          label="Street / Landmark"
+          placeholder="xyz nagar"
+          name="perm_street_landmark"
+          required
+        />
+      </div>
+      <div>
+        <c-form.select
+          label="Country"
+          default_selected="Choose a country"
+          name="perm_country"
+          required
+        >
+        </c-form.select>
+      </div>
+      <div>
+        <c-form.select
+          name="perm_state"
+          label="State"
+          default_selected="Choose a State"
+          required
+        >
+        </c-form.select>
+      </div>
+      <div>
+        <c-form.select
+          name="perm_district"
+          label="District"
+          default_selected="Choose a District"
+          required
+        >
+        </c-form.select>
+      </div>
+      <div>
+        <c-form.input
+          label="City"
+          name="perm_city"
+          placeholder="virar west or east"
+          required
+        />
+      </div>
+      <div>
+        <c-form.input
+          label="Pincode"
+          name="perm_pincode"
+          placeholder="000000"
+          required
+        />
+      </div>
+      <!-- End Inputs -->
+    </div>
+
+    <div class="my-4">
+      <input
+        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+        type="checkbox"
+        name=""
+        id="is_permanent"
+        x-model="checked_1"
+      />
+      <label for="is_permanent">Are Both address same? </label>
+    </div>
+
+    <h4 class="text-md font-medium">Correspondant Address</h4>
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Inputs -->
+      <div>
+        <c-form.input
+          label="Flat Number / Building / Bungalow"
+          placeholder="a/202 ABC building"
+          name="corr_flat_no_building"
+          required
+        />
+      </div>
+      <div>
+        <c-form.input
+          label="Street / Landmark"
+          placeholder="xyz nagar"
+          name="corr_street_landmark"
+          required
+        />
+      </div>
+      <div>
+        <c-form.select
+          label="Country"
+          name="corr_country"
+          default_selected="Choose a country"
+          required
+        >
+        </c-form.select>
+      </div>
+      <div>
+        <c-form.select
+          name="corr_state"
+          label="State"
+          default_selected="Choose a State"
+          required
+        >
+        </c-form.select>
+      </div>
+      <div>
+        <c-form.select
+          name="corr_district"
+          label="District"
+          default_selected="Choose a District"
+          required
+        >
+        </c-form.select>
+      </div>
+      <div>
+        <c-form.input
+          label="City"
+          name="corr_city"
+          placeholder="virar west or east"
+          required
+        />
+      </div>
+      <div>
+        <c-form.input
+          label="Pincode"
+          name="corr_pincode"
+          placeholder="000000"
+          required
+        />
+      </div>
+      <!-- End Inputs -->
+    </div>
+  </c-card>
+  <c-card>
+    <h2 class="text-xl mb-4">Educational Qualification Details</h2>
+    <h3 class="font-medium text-gray-700">Your latest qualification.</h3>
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Inputs -->
+      <div>
+        <c-form.input
+          label="School / College Name"
+          name="school_name"
+          required
+        />
+      </div>
+      <div>
+        <c-form.input
+          label="Course Name"
+          name="course_name"
+          placeholder="S.S.C, H.S.C, Diploma. etc."
+          required
+        />
+      </div>
+      <div>
+        <c-form.input
+          label="Board / University Name"
+          name="university_name"
+          required
+        />
+      </div>
+      <div>
+        <c-form.input label="grade" name="grade" />
+      </div>
+      <div>
+        <c-form.input label="percentage" name="percentage" />
+      </div>
+      <!-- End Inputs -->
+    </div>
+  </c-card>
+
+  <c-card>
+    <h2 class="text-xl mb-4">Income Details</h2>
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Inputs -->
+      <div>
+        <c-form.input
+          label="Annual Income"
+          type="number"
+          name="annual_income"
+        />
+      </div>
+      <div>
+        <c-form.input
+          label="Earning Members"
+          name="earning_members"
+          type="number"
+        />
+      </div>
+      <div>
+        <c-form.input
+          label="Other Members"
+          name="other_members"
+          type="number"
+        />
+      </div>
+      <!-- End Inputs -->
+    </div>
+  </c-card>
+  <c-button.primary class="w-full" type="submit">Submit</c-button.primary>
+</form>
+{% endblock content %}
