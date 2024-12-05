@@ -86,8 +86,11 @@ class SamajSurveyForm(forms.Form):
     company_name = forms.CharField(required=False, max_length=100)
     designation = forms.CharField(required=False, max_length=100)
     occupation_type = forms.ChoiceField(choices=[("Business", "Business"), ("Service", "Service"), (
-        "Self Employed", "Self Employed"), ("Government Job", "Government Job")], required=False)
+        "Self Employed", "Self Employed"),
+        ("Government Job", "Government Job"), ("Farmer", "Farmer")],
+        required=False)
     occupation_name = forms.CharField(required=False, max_length=100)
+    company_city = forms.CharField(required=False, max_length=100)
 
     # Income Details
     annual_income = forms.DecimalField(
