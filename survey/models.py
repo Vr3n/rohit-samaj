@@ -34,6 +34,15 @@ class District(models.Model):
         return f"{self.name} - {self.state.name}"
 
 
+class Taluka(models.Model):
+    name = models.CharField(max_length=100)
+    district = models.ForeignKey(
+        District, on_delete=models.CASCADE, related_name='talukas')
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.district.name}"
+
+
 class City(models.Model):
     name = models.CharField(max_length=100)
     district = models.ForeignKey(District, on_delete=models.CASCADE,
@@ -42,7 +51,7 @@ class City(models.Model):
                               blank=True, null=True)
 
     def __str__(self) -> str:
-        return f"{self.name} - {self.taluka.name}"
+        return f"{self.name} - {self.district.name}"
 
 # Main Samaj Member Model
 
@@ -102,6 +111,8 @@ class SamajMemberAddress(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     district = models.ForeignKey(
         District, on_delete=models.CASCADE, blank=True, null=True)
+    taluka = models.ForeignKey(
+        Taluka, on_delete=models.CASCADE, blank=True, null=True)
     state = models.ForeignKey(
         State, on_delete=models.CASCADE, blank=True, null=True)
     country = models.ForeignKey(
@@ -123,6 +134,7 @@ class SamajMemberEducationalQualification(models.Model):
     city = models.ForeignKey(
         City, on_delete=models.CASCADE, blank=True, null=True)
     grade = models.CharField(max_length=20)
+    description = models.TextField()
     percentage = models.DecimalField(max_digits=5, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -1,0 +1,10 @@
+<c-form.select
+  name="perm_taluka"
+  label="Taluka"
+  default_selected="Choose a Taluka"
+  required
+>
+  {% for taluka in talukas %}
+    <option value="{{ taluka.id }}">{{ taluka.name }}</option>
+  {% endfor %}
+</c-form.select>

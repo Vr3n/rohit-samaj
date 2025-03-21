@@ -2,6 +2,7 @@ from django import forms
 from django.core.validators import RegexValidator
 
 from survey.models import (City, Country, District,
+                           Taluka,
                            SamajMember, State,
                            SamajMemberMobileNumber, SamajMemberIncome,
                            SamajMemberEmail,
@@ -22,6 +23,7 @@ class SamajSurveyForm(forms.Form):
     father_name = forms.CharField(required=False, max_length=100)
     mother_name = forms.CharField(required=False, max_length=100)
     guardian_name = forms.CharField(required=False, max_length=250)
+    date_of_birth = forms.DateField()
 
     # Contact Information
     mobile_number = forms.CharField(
@@ -47,6 +49,7 @@ class SamajSurveyForm(forms.Form):
     corr_city = forms.CharField(required=True, max_length=100)
     corr_taluka = forms.CharField(required=True, max_length=100)
     corr_district = forms.CharField(required=True, max_length=100)
+    corr_taluka = forms.CharField(required=True, max_length=100)
     corr_state = forms.CharField(required=True, max_length=100)
     corr_country = forms.CharField(required=True, max_length=100)
     corr_pincode = forms.CharField(
@@ -63,6 +66,7 @@ class SamajSurveyForm(forms.Form):
     perm_city = forms.CharField(required=True, max_length=100)
     perm_taluka = forms.CharField(required=True, max_length=100)
     perm_district = forms.CharField(required=True, max_length=100)
+    perm_taluka = forms.CharField(required=True, max_length=100)
     perm_state = forms.CharField(required=True, max_length=100)
     perm_country = forms.CharField(required=True, max_length=100)
     perm_pincode = forms.CharField(
@@ -81,6 +85,7 @@ class SamajSurveyForm(forms.Form):
     grade = forms.CharField(required=False, max_length=50)
     percentage = forms.DecimalField(
         required=False, max_digits=5, decimal_places=2, min_value=0, max_value=100)
+    description = forms.CharField(required=False, max_length=500)
 
     # Occupational Details
     company_name = forms.CharField(required=False, max_length=100)
@@ -114,6 +119,10 @@ class SamajSurveyForm(forms.Form):
             corr_district, _ = District.objects.get_or_create(
                 name=cleaned_data['corr_district'])
 
+        if self.cleaned_data['corr_taluka']:
+            corr_taluka, _ = Taluka.objects.get_or_create(
+                name=cleaned_data['corr_taluka'])
+
         if self.cleaned_data['corr_city']:
             corr_city, _ = City.objects.get_or_create(
                 name=cleaned_data['corr_city'])
@@ -130,6 +139,10 @@ class SamajSurveyForm(forms.Form):
             perm_district, _ = District.objects.get_or_create(
                 name=cleaned_data['perm_district'])
 
+        if self.cleaned_data['perm_taluka']:
+            perm_taluka, _ = Taluka.objects.get_or_create(
+                name=cleaned_data['perm_taluka'])
+
         if self.cleaned_data['perm_city']:
             perm_city, _ = City.objects.get_or_create(
                 name=cleaned_data['perm_city'])
@@ -140,6 +153,8 @@ class SamajSurveyForm(forms.Form):
             last_name=cleaned_data['last_name'],
             father_name=cleaned_data['father_name'],
             mother_name=cleaned_data['mother_name'],
+            guardian_name=cleaned_data['guardian_name'],
+            date_of_birth=cleaned_data['date_of_birth']
         )
 
         # Samaj Member Mobile Number.
@@ -172,8 +187,8 @@ class SamajSurveyForm(forms.Form):
             flat_no_building=cleaned_data.get('corr_flat_no_building'),
             street_landmark=cleaned_data.get('corr_street_landmark', ''),
             city=corr_city,
-            taluka=corr_taluka,
             district=corr_district,
+            taluka=corr_taluka,
             state=corr_state,
             country=corr_country,
             pincode=cleaned_data['corr_pincode']
@@ -185,9 +200,9 @@ class SamajSurveyForm(forms.Form):
             flat_no_building=cleaned_data.get('perm_flat_no_building'),
             street_landmark=cleaned_data.get('perm_street_landmark', ''),
             city=perm_city,
-            taluka=perm_taluka,
             district=perm_district,
             state=perm_state,
+            taluka=perm_taluka,
             country=perm_country,
             pincode=cleaned_data['perm_pincode']
         )
@@ -200,7 +215,8 @@ class SamajSurveyForm(forms.Form):
             university_name=cleaned_data['university_name'],
             education_city=cleaned_data['education_city'],
             grade=cleaned_data.get('grade', ''),
-            percentage=cleaned_data.get('percentage', '')
+            percentage=cleaned_data.get('percentage', ''),
+            description=cleaned_data.get('description', '')
         )
 
         # Income Details.

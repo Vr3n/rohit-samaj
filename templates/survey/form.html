@@ -4,7 +4,7 @@
 
 <h2 class="text-xl text-center lg:text-2xl">Shree Rohit Seva Sangh, Mumbai</h2>
 
-<form action="#" method="post" class="space-y-4">
+<form method="post" class="space-y-4">
   <!-- Personal Details -->
   <c-formcard card_title="Personal Details">
     <!-- Inputs -->
@@ -13,9 +13,16 @@
     <c-form.input minlength="3" label="Father Name" name="father_name" />
     <c-form.input minlength="3" label="Mother Name" name="mother_name" />
     <c-form.input minlength="3" label="Guardian Name" name="guardian_name" />
+    <c-form.input
+      label="Date of Birth"
+      type="date"
+      name="date_of_birth"
+      required
+    />
     <p class="w-full col-span-2">
-      * If you're unable to provide your mother’s or father’s name, kindly
-      enter your guardian’s name instead. We understand and appreciate your circumstances.
+      * If you're unable to provide your mother’s or father’s name, kindly enter
+      your guardian’s name instead. We understand and appreciate your
+      circumstances.
     </p>
     <!-- End Inputs -->
   </c-formcard>
@@ -25,11 +32,11 @@
   <c-formcard card_title="Contact Details">
     <!-- Inputs -->
     <c-form.input label="Mobile Number" name="mobile_number" required />
-    <c-form.input label="Email" name="email" />
     <c-form.input
       label="Alternate Mobile Number"
       name="alternate_mobile_number"
     />
+    <c-form.input label="Email" name="email" />
     <c-form.input label="Alternate Email" name="alternate_email" />
     <!-- End Inputs -->
   </c-formcard>
@@ -41,42 +48,37 @@
     <h4 class="text-md font-semibold">Permanent Address</h4>
     <div class="flex flex-col md:grid md:grid-cols-2 gap-4">
       <!-- Inputs -->
-        <c-form.input
-          label="Flat Number / Building / Bungalow"
-          placeholder="a/202 ABC building"
-          name="perm_flat_no_building"
-          required
-        />
-        <c-form.input
-          label="Street / Landmark"
-          placeholder="xyz nagar"
-          name="perm_street_landmark"
-          required
-        />
-        <c-form.select
-          label="Country"
-          name="perm_country"
-          required
-        >
-          {% for country in countries %}
-            {% if country.id == 1 %}
-              <option value="{{ country.id }}" selected>{{ country.name }}</option>
-            {% else %}
-              <option value="{{ country.id }}">{{ country.name }}</option>
-            {% endif %}
-          {% endfor %}
-        </c-form.select>
+      <c-form.input
+        label="Flat Number / Building / Bungalow"
+        placeholder="a/202 ABC building"
+        name="perm_flat_no_building"
+        required
+      />
+      <c-form.input
+        label="Street / Landmark"
+        placeholder="xyz nagar"
+        name="perm_street_landmark"
+        required
+      />
+      <c-form.select label="Country" name="perm_country" required>
+        {% for country in countries %} {% if country.id == 1 %}
+        <option value="{{ country.id }}" selected>{{ country.name }}</option>
+        {% else %}
+        <option value="{{ country.id }}">{{ country.name }}</option>
+        {% endif %} {% endfor %}
+      </c-form.select>
       <div class="perm_state_select">
         <c-form.select
           name="perm_state"
           label="State"
+          hx-trigger="change"
           default_selected="Choose a State"
           hx-get="{% url 'survey:hx_district_select' %}"
           hx-target="#district_select"
           required
         >
           {% for state in states %}
-              <option value="{{ state.id }}">{{ state.name }}</option>
+          <option value="{{ state.id }}">{{ state.name }}</option>
           {% endfor %}
         </c-form.select>
       </div>
@@ -84,7 +86,19 @@
         <c-form.select
           name="perm_district"
           label="District"
+          hx-trigger="change"
+          hx-get="{% url 'survey:hx_taluka_select' %}"
+          hx-target="#taluka_select"
           default_selected="Choose a District"
+          required
+        >
+        </c-form.select>
+      </div>
+      <div id="taluka_select">
+        <c-form.select
+          name="perm_taluka"
+          label="Taluka"
+          default_selected="Choose a Taluka"
           required
         >
         </c-form.select>
@@ -122,80 +136,87 @@
       <div class="flex flex-col md:grid md:grid-cols-2 gap-4">
         <!-- Inputs -->
         <c-form.input
-         label="Flat Number / Building / Bungalow"
-         placeholder="a/202 ABC building"
-         name="corr_flat_no_building"
-         required
-         />
+          label="Flat Number / Building / Bungalow"
+          placeholder="a/202 ABC building"
+          name="corr_flat_no_building"
+          required
+        />
         <c-form.input
-         label="Street / Landmark"
-         placeholder="xyz nagar"
-         name="corr_street_landmark"
-         required
-         />
+          label="Street / Landmark"
+          placeholder="xyz nagar"
+          name="corr_street_landmark"
+          required
+        />
         <c-form.select
-         label="Country"
-         name="corr_country"
-         default_selected="Choose a country"
-         required
-         >
-         {% for country in countries %}
-         {% if country.id == 1 %}
-         <option value="{{ country.id }}" selected>{{ country.name }}</option>
-         {% else %}
-         <option value="{{ country.id }}">{{ country.name }}</option>
-         {% endif %}
-         {% endfor %}
+          label="Country"
+          name="corr_country"
+          default_selected="Choose a country"
+          required
+        >
+          {% for country in countries %} {% if country.id == 1 %}
+          <option value="{{ country.id }}" selected>{{ country.name }}</option>
+          {% else %}
+          <option value="{{ country.id }}">{{ country.name }}</option>
+          {% endif %} {% endfor %}
         </c-form.select>
         <div id="corr_state_select">
           <c-form.select
-                   name="corr_state"
-                   label="State"
-                   hx-get="{% url 'survey:hx_corr_district_select' %}"
-                   hx-target="#corr_district_select"
-                   default_selected="Choose a State"
-                   required
-                   >
-                   {% for state in states %}
-                   <option value="{{ state.id }}">{{ state.name }}</option>
-                   {% endfor %}
+            name="corr_state"
+            label="State"
+            hx-get="{% url 'survey:hx_corr_district_select' %}"
+            hx-target="#corr_district_select"
+            default_selected="Choose a State"
+            required
+          >
+            {% for state in states %}
+            <option value="{{ state.id }}">{{ state.name }}</option>
+            {% endfor %}
           </c-form.select>
         </div>
         <div id="corr_district_select">
           <c-form.select
-             name="corr_district"
-             label="District"
-             default_selected="Choose a District"
-             required
-             >
+            name="corr_district"
+            label="District"
+            hx-get="{% url 'survey:hx_corr_taluka_select' %}"
+            hx-target="#corr_taluka_select"
+            default_selected="Choose a District"
+            required
+          >
+          </c-form.select>
+        </div>
+        <div id="corr_taluka_select">
+          <c-form.select
+            name="corr_taluka"
+            label="Taluka"
+            default_selected="Choose a Taluka"
+            required
+          >
           </c-form.select>
         </div>
         <c-form.input
-           label="City"
-           name="corr_city"
-           placeholder="virar west or east"
-           required
-           />
+          label="City"
+          name="corr_city"
+          placeholder="virar west or east"
+          required
+        />
         <c-form.input
-           label="Pincode"
-           name="corr_pincode"
-           placeholder="000000"
-           required
-           />
+          label="Pincode"
+          name="corr_pincode"
+          placeholder="000000"
+          required
+        />
         <!-- End Inputs -->
       </div>
     </span>
   </c-card>
-  <!-- Address Details --> 
-  <!--Educational Qualitication Details --> 
-  <c-formcard card_title="Educational Qualification Details">
-    <h3 class="font-medium text-gray-700">Your latest qualification.</h3>
+  <!-- Address Details -->
+  <!--Educational Qualitication Details -->
+  <c-formcard
+    subtitle="Will help matching members with same qualification for better networking"
+    card_title="Recent Educaitonal Qualification"
+  >
     <!-- Inputs -->
-    <c-form.input
-      label="School / College Name"
-      name="school_name"
-      required
-    />
+    <c-form.input label="School / College Name" name="school_name" required />
     <c-form.input
       label="Course Name"
       name="course_name"
@@ -207,64 +228,53 @@
       name="university_name"
       required
     />
-    <c-form.input label="grade" name="grade" />
-    <c-form.input label="percentage" name="percentage" />
+    <c-form.input label="Grade" name="grade" />
+    <c-form.input label="Percentage" name="percentage" type="number" />
+    <c-form.input
+      label="Subject List"
+      placeholder="English, Maths, (seperate by comma)"
+      name="description"
+    />
     <!-- End Inputs -->
   </c-formcard>
-  <!--Educational Qualitication Details --> 
+  <!--Educational Qualitication Details -->
 
   <c-formcard card_title="Occupation Details">
     <!-- Inputs -->
-    <c-form.input
-      label="Company Name"
-      type="text"
-      name="company_name"
-    />
-    <c-form.input
-      label="Designation"
-      name="designation"
-      type="text"
-    />
+    <c-form.input label="Company Name" type="text" name="company_name" />
+    <c-form.input label="Designation" name="designation" type="text" />
     <c-form.select
-       name="occupation_type"
-       label="Occupation Type"
-       default_selected="Choose Occupation Type"
-       required>
-       <option value="Business">Business</option>
-       <option value="Self Employed">Self Employed</option>
-       <option value="Service">Service</option>
-       <option value="Government Job">Government Job</option>
-       <option value="Farmer">Farmer</option>
+      name="occupation_type"
+      label="Occupation Type"
+      default_selected="Choose Occupation Type"
+      required
+    >
+      <option value="Business">Business</option>
+      <option value="Self Employed">Self Employed</option>
+      <option value="Service">Service</option>
+      <option value="Government Job">Government Job</option>
+      <option value="Farmer">Farmer</option>
     </c-form.select>
-    <c-form.input
-      label="Occupation Name"
-      name="occupation_name"
-      type="text"
-    />
+    <c-form.input label="Occupation Name" name="occupation_name" type="text" />
     <!-- End Inputs -->
   </c-formcard>
 
   <c-formcard card_title="Income Details">
     <!-- Inputs -->
+    <c-form.input label="Annual Income" type="number" name="annual_income" />
     <c-form.input
-      label="Annual Income"
+      label="Earning Members"
+      name="earning_members"
       type="number"
-      name="annual_income"
     />
     <c-form.input
-     label="Earning Members"
-     name="earning_members"
-     type="number"
-     />
-    <c-form.input
-     label="Non Earning Members"
-     name="other_members"
-     type="number"
-     />
+      label="Non Earning Members"
+      name="other_members"
+      type="number"
+    />
   </c-formcard>
   <div class="mx-4 mb-4">
     <c-button.primary class="w-full" type="submit">Submit</c-button.primary>
   </div>
 </form>
 {% endblock content %}
-

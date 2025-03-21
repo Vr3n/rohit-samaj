@@ -4,7 +4,7 @@ from django.http import HttpRequest
 
 from survey.forms import SamajSurveyForm
 from survey.models import (
-    Country, District, State
+    Country, District, State, Taluka
 )
 
 # Create your views here.
@@ -41,8 +41,14 @@ def hx_perm_district_select(request: HttpRequest):
     context = {}
     state_id = request.GET.get('perm_state')
 
+    try:
+        state_id = int(state_id)
+    except ValueError:
+        state_id = None
+
     if state_id:
-        context['districts'] = District.objects.filter(state_id=state_id)
+        context['districts'] = District.objects.filter(
+            state_id=state_id).order_by('name')
 
     return render(request, "survey/hx/perm_district_select.html", context)
 
@@ -51,7 +57,45 @@ def hx_corr_district_select(request: HttpRequest):
     context = {}
     state_id = request.GET.get('corr_state')
 
+    try:
+        state_id = int(state_id)
+    except ValueError:
+        state_id = None
+
     if state_id:
-        context['districts'] = District.objects.filter(state_id=state_id)
+        context['districts'] = District.objects.filter(
+            state_id=state_id).order_by('name')
 
     return render(request, "survey/hx/corr_district_select.html", context)
+
+
+def hx_corr_taluka_select(request: HttpRequest):
+    context = {}
+    district_id = request.GET.get('corr_district')
+
+    try:
+        district_id = int(district_id)
+    except ValueError:
+        district_id = None
+
+    if district_id:
+        context['talukas'] = Taluka.objects.filter(
+            district_id=district_id).order_by('name')
+
+    return render(request, "survey/hx/corr_taluka_select.html", context)
+
+
+def hx_perm_taluka_select(request: HttpRequest):
+    context = {}
+    district_id = request.GET.get('perm_district')
+
+    try:
+        district_id = int(district_id)
+    except ValueError:
+        district_id = None
+
+    if district_id:
+        context['talukas'] = Taluka.objects.filter(
+            district_id=district_id).order_by('name')
+
+    return render(request, "survey/hx/perm_taluka_select.html", context)

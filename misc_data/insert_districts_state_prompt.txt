@@ -1,0 +1,24 @@
+Create a postgreSQL query from the json. Where I want to insert into the state
+, district, and taluka. Below are the fields from json which we will insert into table.
+
+The tables are:
+1. State: name, country (fk) (default = 1)
+2. District: name, state (fk)
+3. Taluka: name, district (fk)
+
+
+The json fields which correspond to table fields are (table_field: json_key):
+1. State:
+    id: state_code
+    name: state_name_english
+    country: 1 (this is default value)
+
+2. District:
+    id: district_code
+    name: district_name_english
+    state: state_code
+
+3. Taluka:
+    id: subdistrict_code
+    name: subdistrict_name_english
+    district: district_code
