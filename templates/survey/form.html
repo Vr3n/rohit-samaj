@@ -5,6 +5,7 @@
 <h2 class="text-xl text-center lg:text-2xl">Shree Rohit Seva Sangh, Mumbai</h2>
 
 <form method="post" class="space-y-4">
+  {% csrf_token %}
   <!-- Personal Details -->
   <c-formcard card_title="Personal Details">
     <!-- Inputs -->
@@ -177,6 +178,7 @@
           <c-form.select
             name="corr_district"
             label="District"
+            hx-trigger="change"
             hx-get="{% url 'survey:hx_corr_taluka_select' %}"
             hx-target="#corr_taluka_select"
             default_selected="Choose a District"

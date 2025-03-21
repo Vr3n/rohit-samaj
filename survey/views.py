@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.http import HttpRequest
+from django.urls import reverse
 
 from survey.forms import SamajSurveyForm
 from survey.models import (
@@ -11,7 +12,7 @@ from survey.models import (
 
 
 def survey_sucess(request: HttpRequest):
-    return render(request, 'survey_success.html')
+    return render(request, 'survey/survey_success.html')
 
 
 def samaj_survey(request: HttpRequest):
@@ -22,7 +23,7 @@ def samaj_survey(request: HttpRequest):
         if form.is_valid():
             form.save()
             messages.success(request, "Survey Completed Successfully!")
-            return redirect('success_page')
+            return redirect(reverse('survey:survey_sucess'))
         else:
             messages.error(request, "Your form has errors please fix them.")
     else:

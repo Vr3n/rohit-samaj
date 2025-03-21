@@ -108,40 +108,40 @@ class SamajSurveyForm(forms.Form):
         cleaned_data = self.cleaned_data
 
         if self.cleaned_data['corr_country']:
-            corr_country, _ = Country.objects.get_or_create(
-                name=cleaned_data['corr_country'])
+            corr_country = Country.objects.get(
+                id=cleaned_data['corr_country'])
 
         if self.cleaned_data['corr_state']:
-            corr_state, _ = State.objects.get_or_create(
-                name=cleaned_data['corr_state'])
+            corr_state = State.objects.get(
+                id=cleaned_data['corr_state'])
 
         if self.cleaned_data['corr_district']:
-            corr_district, _ = District.objects.get_or_create(
-                name=cleaned_data['corr_district'])
+            corr_district = District.objects.get(
+                id=cleaned_data['corr_district'])
 
         if self.cleaned_data['corr_taluka']:
-            corr_taluka, _ = Taluka.objects.get_or_create(
-                name=cleaned_data['corr_taluka'])
+            corr_taluka = Taluka.objects.get(
+                id=cleaned_data['corr_taluka'])
 
         if self.cleaned_data['corr_city']:
             corr_city, _ = City.objects.get_or_create(
                 name=cleaned_data['corr_city'])
 
         if self.cleaned_data['perm_country']:
-            perm_country, _ = Country.objects.get_or_create(
-                name=cleaned_data['perm_country'])
+            perm_country = Country.objects.get(
+                id=cleaned_data['perm_country'])
 
         if self.cleaned_data['perm_state']:
-            perm_state, _ = State.objects.get_or_create(
-                name=cleaned_data['perm_state'])
+            perm_state = State.objects.get(
+                id=cleaned_data['perm_state'])
 
         if self.cleaned_data['perm_district']:
-            perm_district, _ = District.objects.get_or_create(
-                name=cleaned_data['perm_district'])
+            perm_district = District.objects.get(
+                id=cleaned_data['perm_district'])
 
         if self.cleaned_data['perm_taluka']:
-            perm_taluka, _ = Taluka.objects.get_or_create(
-                name=cleaned_data['perm_taluka'])
+            perm_taluka = Taluka.objects.get(
+                id=cleaned_data['perm_taluka'])
 
         if self.cleaned_data['perm_city']:
             perm_city, _ = City.objects.get_or_create(
@@ -172,13 +172,13 @@ class SamajSurveyForm(forms.Form):
         # Samaj Member Email Address.
         SamajMemberEmail.objects.create(
             member=member,
-            mobile_number=self.cleaned_data['email']
+            email=self.cleaned_data['email']
         )
 
         if self.cleaned_data['alternate_email']:
             SamajMemberEmail.objects.create(
                 member=member,
-                mobile_number=self.cleaned_data['alternate_email']
+                email=self.cleaned_data['alternate_email']
             )
 
         # Correspondance Address.
@@ -213,7 +213,7 @@ class SamajSurveyForm(forms.Form):
             school_name=cleaned_data['school_name'],
             course_name=cleaned_data['course_name'],
             university_name=cleaned_data['university_name'],
-            education_city=cleaned_data['education_city'],
+            city=cleaned_data['education_city'],
             grade=cleaned_data.get('grade', ''),
             percentage=cleaned_data.get('percentage', ''),
             description=cleaned_data.get('description', '')

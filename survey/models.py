@@ -51,7 +51,7 @@ class City(models.Model):
                               blank=True, null=True)
 
     def __str__(self) -> str:
-        return f"{self.name} - {self.district.name}"
+        return f"{self.name}"
 
 # Main Samaj Member Model
 
@@ -62,6 +62,7 @@ class SamajMember(models.Model):
     father_name = models.CharField(max_length=100, blank=True, null=True)
     mother_name = models.CharField(max_length=100, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
+    guardian_name = models.CharField(max_length=100, blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -131,9 +132,8 @@ class SamajMemberEducationalQualification(models.Model):
     school_name = models.CharField(max_length=100)
     course_name = models.CharField(max_length=100)
     university_name = models.CharField(max_length=100)
-    city = models.ForeignKey(
-        City, on_delete=models.CASCADE, blank=True, null=True)
-    grade = models.CharField(max_length=20)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    grade = models.CharField(max_length=20, null=True, blank=True)
     description = models.TextField()
     percentage = models.DecimalField(max_digits=5, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
