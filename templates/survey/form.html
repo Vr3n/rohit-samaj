@@ -4,7 +4,13 @@
 
 <h2 class="text-xl text-center lg:text-2xl">Shree Rohit Seva Sangh, Mumbai</h2>
 
-<form method="post" class="space-y-4">
+<form
+  autocomplete="off"
+  method="post"
+  id="survey_form"
+  class="space-y-4"
+  novalidate="novalidate"
+>
   {% csrf_token %}
   <!-- Personal Details -->
   <c-formcard card_title="Personal Details">
@@ -21,8 +27,8 @@
       required
     />
     <p class="w-full col-span-2">
-      * If you're unable to provide your mother’s or father’s name, kindly enter
-      your guardian’s name instead. We understand and appreciate your
+      * If you're unable to provide your mother&apos;s or father&apos;s name, kindly enter
+      your guardian&apos;s name instead. We understand and appreciate your
       circumstances.
     </p>
     <!-- End Inputs -->
@@ -243,21 +249,36 @@
 
   <c-formcard card_title="Occupation Details">
     <!-- Inputs -->
-    <c-form.input label="Company Name" type="text" name="company_name" />
-    <c-form.input label="Designation" name="designation" type="text" />
     <c-form.select
       name="occupation_type"
       label="Occupation Type"
       default_selected="Choose Occupation Type"
       required
     >
-      <option value="Business">Business</option>
+      <option value="Bussiness">Bussiness</option>
       <option value="Self Employed">Self Employed</option>
       <option value="Service">Service</option>
       <option value="Government Job">Government Job</option>
       <option value="Farmer">Farmer</option>
     </c-form.select>
-    <c-form.input label="Occupation Name" name="occupation_name" type="text" />
+    <c-form.input
+      label="Company Name"
+      placeholder="abc org"
+      type="text"
+      name="company_name"
+    />
+    <c-form.input
+      label="Designation"
+      placeholder="e.g. Senior Manager"
+      name="designation"
+      type="text"
+    />
+    <c-form.input
+      label="Occupation Name"
+      placeholder="e.g. Information Technology"
+      name="occupation_name"
+      type="text"
+    />
     <!-- End Inputs -->
   </c-formcard>
 
@@ -280,3 +301,76 @@
   </div>
 </form>
 {% endblock content %}
+<!-- -->
+{% block custom_js %}
+<script>
+  const validator = new JustValidate("#survey_form", {
+    validateBeforeSubmitting: true,
+    errorFieldCssClass: [
+      "border-red-600",
+      "text-red-600",
+      "focus:ring-red-600",
+      "focus:border-red-600",
+    ],
+    errorLabelCssClass: ["text-red-600"],
+    successFieldCssClass: [
+      "border-green-600",
+      "text-green-600",
+      "focus:ring-green-600",
+      "focus:border-green-600",
+    ],
+    successLabelCssClass: ["text-green-500"],
+  });
+
+  const name_validators = [
+    { rule: "required" },
+    { rule: "minLength", value: 3 },
+  ];
+
+  const mobile_number_len_validator = (value) => {
+    return String(value).length === 10;
+  };
+
+  const mobile_number_validators = [
+    { rule: "required" },
+    { rule: "number" },
+    {
+      validator: (value) => mobile_number_len_validator(value),
+      errorMessage: "Mobile Number should be 10 digits.",
+    },
+  ];
+
+  const pincode_validators = [
+    {
+      rule: "customRegexp",
+      value: "^[1-9][0-9]{5}$",
+      errorMessage: "Pincode should be 6 digits.",
+    },
+  ];
+
+  validator
+    .addField("#first_name", name_validators)
+    .addField("#last_name", name_validators)
+    .addField("#date_of_birth", [{ rule: "required" }])
+    .addField("#mobile_number", mobile_number_validators)
+    .addField("#alternate_mobile_number", [
+      { rule: "number" },
+      {
+        validator: (value) => mobile_number_len_validator(value),
+        errorMessage: "Mobile Number should be 10 digits.",
+      },
+    ])
+    .addField("#perm_pincode", pincode_validators)
+    .addField("#corr_pincode", pincode_validators)
+    .addField("#school_name", [{ rule: "required" }])
+    .addField("#course_name", [{ rule: "required" }])
+    .addField("#university_name", [{ rule: "required" }])
+    .addField("#grade", [{ rule: "number" }])
+    .addField("#percentage", [{ rule: "number" }])
+    .addField("#occupation_type", [{ rule: "required" }])
+    .addField("#annual_income", [{ rule: "number" }])
+    .addField("#earning_members", [{ rule: "number" }])
+    .addField("#other_members", [{ rule: "number" }]);
+</script>
+{% endblock custom_js %}
+<!-- -->

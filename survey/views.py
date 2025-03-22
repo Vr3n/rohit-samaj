@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.http import HttpRequest
 from django.urls import reverse
+from django.db import transaction
 
 from survey.forms import SamajSurveyForm
 from survey.models import (
@@ -21,11 +22,16 @@ def samaj_survey(request: HttpRequest):
         form = SamajSurveyForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            messages.success(request, "Survey Completed Successfully!")
-            return redirect(reverse('survey:survey_sucess'))
+            try:
+                with transaction.atomic():
+                    form.save()
+                    messages.success(request, "Survey Completed Successfully!")
+                    return redirect(reverse('survey:survey_sucess'))
+            except Exception as e:
+                print("There was an unexpected error.", str(e))
+                messages.error(request, "Your form has errors please fix them.")
         else:
-            messages.error(request, "Your form has errors please fix them.")
+            messages.error(request, "Your form has errors please fix them.", form.errors)
     else:
         form = SamajSurveyForm()
         context['countries'] = Country.objects.all()
