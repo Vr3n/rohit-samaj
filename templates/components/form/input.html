@@ -1,11 +1,20 @@
-<c-vars type="text" />
+<c-vars type="text" error="false"/>
 
 <div class="control-wrapper">
   <label
     for="{{ name }}"
-    class="input-label block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+    class="input-label block mb-2 text-sm font-medium 
+
+    {% if error != 'false' %}
+      text-red-700 dark:text-white
+    {% else %}
+      text-gray-900 dark:text-white
+    {% endif %}
+    "
   >
-    {{ label }} {% if required %}<span class="text-red-700">*</span>{% endif %}
+    {{ label }} 
+    <!-- -->
+    {% if required %}<span class="text-red-700">*</span>{% endif %}
   </label>
   <div class="input-wrapper">
     <input
@@ -13,7 +22,16 @@
       name="{{ name }}"
       id="{{ name }}"
       {{ attrs }}
-      class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 {{ class }}"
+      class="bg-gray-50 border  text-sm rounded-lg  {{ class }}
+        {% if error != 'false' %}
+          border-red-300 text-red-700 focus:ring-red-500 focus:border-red-500 block w-full p-2.5 dark:bg-red-700 dark:border-red-600 dark:placeholder-red-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500 
+        {% else %}
+          border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 
+        {% endif %}
+      "
     />
   </div>
+  {% if error != "false" %}
+    <p class="text-sm text-red-700">{{ error }}</p>
+  {% endif %}
 </div>

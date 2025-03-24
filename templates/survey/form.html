@@ -27,9 +27,9 @@
       required
     />
     <p class="w-full col-span-2">
-      * If you're unable to provide your mother&apos;s or father&apos;s name, kindly enter
-      your guardian&apos;s name instead. We understand and appreciate your
-      circumstances.
+      * If you're unable to provide your mother&apos;s or father&apos;s name,
+      kindly enter your guardian&apos;s name instead. We understand and
+      appreciate your circumstances.
     </p>
     <!-- End Inputs -->
   </c-formcard>
@@ -38,7 +38,13 @@
   <!-- Contact Details -->
   <c-formcard card_title="Contact Details">
     <!-- Inputs -->
-    <c-form.input label="Mobile Number" name="mobile_number" required />
+    <div id="mobile-input-container">
+      <c-form.input
+        label="Mobile Number"
+        name="mobile_number"
+        required
+      />
+    </div>
     <c-form.input
       label="Alternate Mobile Number"
       name="alternate_mobile_number"
@@ -304,6 +310,11 @@
 <!-- -->
 {% block custom_js %}
 <script>
+  const mobile_validated_event = new Event("survey-mobile-validated");
+
+  const mobile_number_elemt = document.querySelector('#mobile_number');
+  const alt_mobile_number_elemt = document.querySelector('#alternate_mobile_number');
+
   const validator = new JustValidate("#survey_form", {
     validateBeforeSubmitting: true,
     errorFieldCssClass: [
@@ -331,15 +342,6 @@
     return String(value).length === 10;
   };
 
-  const mobile_number_validators = [
-    { rule: "required" },
-    { rule: "number" },
-    {
-      validator: (value) => mobile_number_len_validator(value),
-      errorMessage: "Mobile Number should be 10 digits.",
-    },
-  ];
-
   const pincode_validators = [
     {
       rule: "customRegexp",
@@ -352,11 +354,26 @@
     .addField("#first_name", name_validators)
     .addField("#last_name", name_validators)
     .addField("#date_of_birth", [{ rule: "required" }])
-    .addField("#mobile_number", mobile_number_validators)
+    .addField("#mobile_number", [
+      { rule: "required" },
+      { rule: "number" },
+      {
+        validator: (value) => {
+          const isValid = mobile_number_len_validator(value);
+
+          return isValid
+        },
+        errorMessage: "Mobile Number should be 10 digits.",
+      },
+    ])
     .addField("#alternate_mobile_number", [
       { rule: "number" },
       {
-        validator: (value) => mobile_number_len_validator(value),
+        validator: (value) => {
+          const isValid = mobile_number_len_validator(value);
+
+          return isValid
+        },
         errorMessage: "Mobile Number should be 10 digits.",
       },
     ])

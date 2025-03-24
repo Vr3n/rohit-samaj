@@ -1,0 +1,20 @@
+  <div id="mobile-input-container">
+    <c-form.input
+      label="Mobile Number"
+      hx-trigger="survey-mobile-validated from:#mobile_number"
+      hx-get="{% url 'survey:check-mobile-exists' %}"
+      hx-include="[name='mobile_number']"
+      hx-swap="outerHTML"
+      hx-target="#mobile-input-container"
+      name="mobile_number"
+      value="{{ value }}"
+      required
+      error="
+      {% if is_exist %}
+        Mobile Number Already Exists
+      {% else %}
+        false
+      {% endif %}
+      "
+    />
+  </div>
