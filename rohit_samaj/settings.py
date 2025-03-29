@@ -184,12 +184,17 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
+LOGIN_REDIRECT_URL = "/"  # Redirect users after successful login
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        'EMAIL_AUTHENTICATION': True,
+        "AUTH_PARAMS": {"access_type": "online"},
+        "APPS": [{
+            "client_id": os.getenv("GOOGLE_OAUTH_CLIENT_ID"),
+            "secret": os.getenv("GOOGLE_OAUTH_CLIENT_SECRET"),
+        }],
         'SCOPE': ["profile", "email"],
-        "AUTH_PARAMS": {"access_type": "online"}
     },
 }
