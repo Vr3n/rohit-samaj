@@ -16,6 +16,7 @@ dependencies = [
     "django-dotenv==1.4.2",
     "django-money==3.5.3",
     "django-stubs[compatible-mypy]>=5.1.3",
+    "ipython>=9.0.2",
     "psycopg2-binary==2.9.10",
     "py-moneyed==3.0",
     "rcssmin==1.1.2",

@@ -1,0 +1,33 @@
+<nav class="flex items-center justify-between px-6 py-4 border-b bg-white">
+    <!-- Left Section -->
+    <div class="flex items-center space-x-4">
+        <img src="https://flowbite.com/docs/images/logo.svg" alt="Logo" class="w-8 h-8">
+        <span class="text-lg font-semibold">Flowbite</span>
+    </div>
+
+    <!-- Middle Navigation Links -->
+    <div class="flex space-x-6 text-gray-600 text-sm">
+        <a href="#" class="text-blue-600 border-b-2 border-blue-600 pb-1">Overview</a>
+        <a href="#" class="hover:text-gray-900">Company</a>
+        <a href="#" class="hover:text-gray-900">Team</a>
+        <a href="#" class="hover:text-gray-900">Features</a>
+        <a href="#" class="hover:text-gray-900">Marketplace</a>
+        <a href="#" class="hover:text-gray-900">Resources</a>
+        <a href="#" class="hover:text-gray-900">Forum</a>
+        <a href="#" class="hover:text-gray-900">Support</a>
+    </div>
+
+    <!-- Right Section -->
+    <div class="flex items-center space-x-4">
+      <a href="#" class="text-gray-600 hover:text-gray-900 text-sm">Changelog</a>
+      <a href="#" class="text-gray-600 hover:text-gray-900 text-sm">Support</a>
+      <button class="px-4 py-2 bg-gray-100 rounded-lg text-gray-900 text-sm hover:bg-gray-200">
+        Feedback
+      </button>
+      <div class="flex items-center space-x-2">
+        <img src="https://placehold.co/160x160?text={{ request.user.first_name|slice:'0:1' }}+{{ request.user.last_name|slice:'0:1' }}" alt="{{ request.user.get_full_name }}" class="w-8 h-8 rounded-full">
+        <span class="text-gray-800 font-medium">{{ request.user.get_full_name }}</span>
+      </div>
+    </div>
+</nav>
+

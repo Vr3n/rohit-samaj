@@ -13,16 +13,19 @@
         src="{% static 'vendors/alpine.min.js' %}"
     ></script>
 
+    <style></style>
+
     {% compress css %}
       <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     {% endcompress %}
   </head>
   <body>
-    <main class="max-w-screen-xl mx-auto format">
-      {% block content %}
-      <!-- comment-->
-      {% endblock content %}
+    {% include "partials/_navbar.html" %}
+
+    <main class="container mx-auto p-6">
+      {% block content %} {% endblock content %}
     </main>
+
     <script src="{% static 'vendors/flowbite.min.js' %}"></script>
     <script src="{% static 'vendors/htmx.min.js' %}"></script>
     <script src="{% static 'vendors/just-validate.min.js' %}"></script>
