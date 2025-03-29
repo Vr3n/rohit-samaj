@@ -53,7 +53,6 @@ INSTALLED_APPS = [
 
     # Providers.
     "allauth.socialaccount.providers.google",
-    "allauth.socialaccount.providers.facebook",
 
     'users.apps.UsersConfig',
     'survey.apps.SurveyConfig',
