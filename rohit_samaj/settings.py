@@ -45,8 +45,21 @@ INSTALLED_APPS = [
     'compressor',
     'django_browser_reload',
     'django_cotton',
-    'survey',
+
+    # Allauth.
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+
+    # Providers.
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.facebook",
+
+    'users.apps.UsersConfig',
+    'survey.apps.SurveyConfig',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -56,7 +69,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    "allauth.account.middleware.AccountMiddleware",
     'django_browser_reload.middleware.BrowserReloadMiddleware',
+
 ]
 
 ROOT_URLCONF = 'rohit_samaj.urls'
@@ -161,3 +177,24 @@ STATICFILES_FINDERS = (
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+LOGIN_REDIRECT_URL = "/"  # Redirect users after successful login
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        "AUTH_PARAMS": {"access_type": "online"},
+        "APPS": [{
+            "client_id": os.getenv("GOOGLE_OAUTH_CLIENT_ID"),
+            "secret": os.getenv("GOOGLE_OAUTH_CLIENT_SECRET"),
+        }],
+        'SCOPE': ["profile", "email"],
+    },
+}
