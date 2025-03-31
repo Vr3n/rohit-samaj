@@ -2,5 +2,8 @@
 
 <!-- -->
 {% block content %}
-<h1 class="text-2xl font-bold text-gray-800">Welcome, {{ request.user.get_full_name }}</h1>
+  <h1 class="text-2xl font-bold text-gray-800">Welcome, {{ request.user.get_full_name }}</h1>
+  <c-card class="mt-2">
+    <a href="{% url 'profile' %}" class="underline text-blue-600 cursor-pointer">To complete your Samaaj Member Profile click here.</a>
+  </c-card>
 {% endblock content %}

@@ -4,6 +4,8 @@ from django.dispatch import receiver
 from allauth.account.signals import user_signed_up
 from django.http import HttpRequest
 
+from survey.models import (
+    SamajMember, SamajMemberMobileNumber, SamajMemberEmail)
 from users.models import UserProfile
 
 
@@ -14,9 +16,8 @@ def create_user_profile(request: HttpRequest, user: User, **kwargs):
     """
 
     profile_obj: UserProfile
-    created: bool
 
-    profile_obj, created = UserProfile.objects.get_or_create(user=user)
+    profile_obj, _ = UserProfile.objects.get_or_create(user=user)
 
     social_login = kwargs.get("sociallogin")
 

@@ -1,0 +1,37 @@
+{% load static %}
+<!-- -->
+{% load compress %} 
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rohit Samaj</title>
+    <script
+      defer
+        src="{% static 'vendors/alpine.min.js' %}"
+    ></script>
+
+    <style></style>
+
+    {% compress css %}
+      <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    {% endcompress %}
+  </head>
+  <body>
+    <div class="min-h-screen flex flex-col justify-center bg-gray-50 dark:bg-gray-900">
+      {% block content %}
+      {% endblock content %}
+    </div>
+
+    <script src="{% static 'vendors/flowbite.min.js' %}"></script>
+    <script src="{% static 'vendors/htmx.min.js' %}"></script>
+    <script src="{% static 'vendors/just-validate.min.js' %}"></script>
+
+    {% block custom_js %}
+    <!-- write your custom js scripts here. -->
+    {% endblock custom_js %}
+  </body>
+</html>
+

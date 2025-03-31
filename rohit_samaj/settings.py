@@ -53,7 +53,6 @@ INSTALLED_APPS = [
 
     # Providers.
     "allauth.socialaccount.providers.google",
-    "allauth.socialaccount.providers.facebook",
 
     'users.apps.UsersConfig',
     'survey.apps.SurveyConfig',
@@ -196,5 +195,7 @@ SOCIALACCOUNT_PROVIDERS = {
             "secret": os.getenv("GOOGLE_OAUTH_CLIENT_SECRET"),
         }],
         'SCOPE': ["profile", "email"],
+        'OAUTH_PKCE_ENABLED': True,
+        'FETCH_USERINFO': True
     },
 }
