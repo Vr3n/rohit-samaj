@@ -21,6 +21,15 @@ def create_user_profile(request: HttpRequest, user: User, **kwargs):
 
     social_login = kwargs.get("sociallogin")
 
+    email_obj, email_created = SamajMemberEmail.objects.get_or_create(
+        email=user.email)
+
+    # Attach the user to samaaj member if exists.
+    if not email_created:
+        sm_obj = SamajMember.objects.get(email_obj.member)
+        sm_obj.user = user
+        sm_obj.save()
+
     # Extract avtar URL from social account.
     avatar_url = None
 

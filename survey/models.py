@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import timezone
+from django.contrib.auth import get_user_model
 
 # Location Models
 
@@ -57,6 +57,8 @@ class City(models.Model):
 
 
 class SamajMember(models.Model):
+    user = models.OneToOneField(
+        get_user_model(), null=True, blank=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     father_name = models.CharField(max_length=100, blank=True, null=True)
