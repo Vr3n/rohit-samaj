@@ -94,7 +94,6 @@ class SamajMemberMobileNumber(models.Model):
 class SamajMemberEmail(models.Model):
     member = models.ForeignKey(
         SamajMember, on_delete=models.CASCADE, related_name='emails')
-    # Add validators for digits only
     email = models.EmailField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
