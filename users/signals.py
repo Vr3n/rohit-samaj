@@ -53,6 +53,7 @@ def create_user_profile(request: HttpRequest, user: User, **kwargs):
 
             # Create or update the user profile with the avatar.
             if avatar_url:
+                print(avatar_url)
                 profile_obj.avatar = avatar_url
                 profile_obj.save()
 
