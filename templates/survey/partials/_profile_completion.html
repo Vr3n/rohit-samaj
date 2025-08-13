@@ -1,0 +1,62 @@
+{% if profile_incomplete %}
+<div class="border border-orange-200 bg-orange-50 p-4 rounded-lg flex items-center space-x-3 mb-6">
+    <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+    <p class="text-orange-800">Your profile is incomplete. Please fill in all the details.</p>
+    <a href="{% url 'users:profile' %}" class="text-orange-600 hover:underline whitespace-nowrap">Complete Profile</a>
+</div>
+{% endif %}
+
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold mb-4">Profile Completion</h2>
+    <div class="mb-4">
+        <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ profile_completion_percentage }}%"></div>
+        </div>
+        <p class="text-right text-sm text-gray-600 mt-1">{{ profile_completion_percentage|floatformat:0 }}% Complete</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        {% for section, completed in profile_sections.items %}
+        <div class="flex items-center space-x-2">
+            {% if completed %}
+            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            {% else %}
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            {% endif %}
+            <span class="text-gray-700">{{ section }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="w-full">
+        <div id="profile-completion-chart"></div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var options = {
+            chart: {
+                type: 'pie',
+                height: 200
+            },
+            series: [{{ profile_completion_percentage }}],
+            labels: ['Profile Completion'],
+            colors: ['#10b981', '#f3f4f6'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 150
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        }
+
+        var chart = new ApexCharts(document.querySelector("#profile-completion-chart"), options);
+        chart.render();
+    });
+</script>

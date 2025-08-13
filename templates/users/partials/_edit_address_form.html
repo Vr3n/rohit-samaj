@@ -1,0 +1,63 @@
+<form hx-post="{% url 'users:update_address' %}" hx-target="#address-container" hx-swap="outerHTML">
+    {% csrf_token %}
+    <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+        <div class="sm:col-span-2">
+            <label for="flat_no_building" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Flat No / Building</label>
+            <input type="text" name="flat_no_building" id="flat_no_building" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.flat_no_building.value|default:'' }}" required>
+            {% if form.flat_no_building.errors %}
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.flat_no_building.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div class="sm:col-span-2">
+            <label for="street_landmark" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Street / Landmark</label>
+            <input type="text" name="street_landmark" id="street_landmark" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.street_landmark.value|default:'' }}">
+            {% if form.street_landmark.errors %}
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.street_landmark.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
+            <input type="text" name="city" id="city" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.city.value|default:'' }}" required>
+            {% if form.city.errors %}
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.city.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <label for="district" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">District</label>
+            <input type="text" name="district" id="district" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.district.value|default:'' }}">
+            {% if form.district.errors %}
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.district.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <label for="taluka" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Taluka</label>
+            <input type="text" name="taluka" id="taluka" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.taluka.value|default:'' }}">
+            {% if form.taluka.errors %}
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.taluka.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <label for="state" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">State</label>
+            <input type="text" name="state" id="state" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.state.value|default:'' }}" required>
+            {% if form.state.errors %}
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.state.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <label for="country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
+            <input type="text" name="country" id="country" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.country.value|default:'' }}" required>
+            {% if form.country.errors %}
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.country.errors.0 }}</p>
+            {% endif %}
+        </div>
+        <div>
+            <label for="pincode" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pincode</label>
+            <input type="text" name="pincode" id="pincode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.pincode.value|default:'' }}" required>
+            {% if form.pincode.errors %}
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.pincode.errors.0 }}</p>
+            {% endif %}
+        </div>
+    </div>
+    <button type="submit" class="mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Save Address</button>
+    <button type="button" hx-get="{% url 'users:edit_address' %}" hx-target="#address-container" hx-swap="outerHTML" class="mt-4 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Cancel</button>
+</form>

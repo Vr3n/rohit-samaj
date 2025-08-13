@@ -1,0 +1,7 @@
+<div id="mobile-number-container">
+    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Mobile number</dt>
+    <dd class="flex items-center justify-between">
+        <span class="text-base font-semibold text-gray-900 dark:text-white">{{ user_profile.phone_number|default:"Not provided" }}</span>
+        <button hx-get="{% url 'users:edit_mobile_number' %}" hx-target="#mobile-number-container" hx-swap="outerHTML" class="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Edit</button>
+    </dd>
+</div>

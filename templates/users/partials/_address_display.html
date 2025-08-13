@@ -1,0 +1,28 @@
+<div id="address-container">
+    <h3 class="text-lg font-semibold mb-2">Address</h3>
+    {% if address.flat_no_building %}
+        <p class="text-gray-700">{{ address.flat_no_building }}</p>
+    {% endif %}
+    {% if address.street_landmark %}
+        <p class="text-gray-700">{{ address.street_landmark }}</p>
+    {% endif %}
+    {% if address.city %}
+        <p class="text-gray-700">{{ address.city }}</p>
+    {% endif %}
+    {% if address.district %}
+        <p class="text-gray-700">{{ address.district }}</p>
+    {% endif %}
+    {% if address.taluka %}
+        <p class="text-gray-700">{{ address.taluka }}</p>
+    {% endif %}
+    {% if address.state %}
+        <p class="text-gray-700">{{ address.state }}</p>
+    {% endif %}
+    {% if address.country %}
+        <p class="text-gray-700">{{ address.country }}</p>
+    {% endif %}
+    {% if address.pincode %}
+        <p class="text-gray-700">{{ address.pincode }}</p>
+    {% endif %}
+    <button hx-get="{% url 'users:edit_address' %}" hx-target="#address-container" hx-swap="outerHTML" class="mt-4 text-blue-600 hover:underline">Edit Address</button>
+</div>

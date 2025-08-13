@@ -10,7 +10,6 @@ class UserProfile(models.Model):
         User, on_delete=models.CASCADE, related_name="profile"
     )
     phone_number = models.CharField(max_length=20, blank=True, null=True)
-
     # optional profile picture.
     avatar = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
