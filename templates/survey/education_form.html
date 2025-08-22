@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:shadow-md dark:bg-gray-800 dark:border-gray-700 p-8">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Educational Qualifications</h1>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ education_formset.management_form }}
+
+            <div id="education-formset-container">
+                {% for form in education_formset %}
+                    <div class="education-form mb-6 p-4 border border-gray-200 rounded-lg dark:border-gray-700">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Qualification {{ forloop.counter }}</h3>
+                            {% if education_formset.can_delete %}
+                                <div class="flex items-center">
+                                    {{ form.DELETE.label_tag }} {{ form.DELETE }}
+                                    <label for="{{ form.DELETE.id_for_label }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remove</label>
+                                </div>
+                            {% endif %}
+                        </div>
+                        {{ form.id }}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="{{ form.school_name.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">School/College Name</label>
+                                {{ form.school_name }}
+                                {% if form.school_name.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.school_name.errors|first }}</p>{% endif %}
+                            </div>
+                            <div>
+                                <label for="{{ form.course_name.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Course Name</label>
+                                {{ form.course_name }}
+                                {% if form.course_name.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.course_name.errors|first }}</p>{% endif %}
+                            </div>
+                            <div>
+                                <label for="{{ form.university_name.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">University Name</label>
+                                {{ form.university_name }}
+                                {% if form.university_name.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.university_name.errors|first }}</p>{% endif %}
+                            </div>
+                            <div>
+                                <label for="{{ form.city.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
+                                {{ form.city }}
+                                {% if form.city.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.city.errors|first }}</p>{% endif %}
+                            </div>
+                            <div>
+                                <label for="{{ form.grade.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Grade</label>
+                                {{ form.grade }}
+                                {% if form.grade.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.grade.errors|first }}</p>{% endif %}
+                            </div>
+                            <div>
+                                <label for="{{ form.percentage.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Percentage</label>
+                                {{ form.percentage }}
+                                {% if form.percentage.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.percentage.errors|first }}</p>{% endif %}
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="{{ form.description.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                                {{ form.description }}
+                                {% if form.description.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.description.errors|first }}</p>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="button" id="add-education-form" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Add Another Qualification</button>
+
+            <div class="mt-8 flex justify-end">
+                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save and Continue</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block custom_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const educationFormsetContainer = document.getElementById('education-formset-container');
+    const addEducationFormButton = document.getElementById('add-education-form');
+    const totalEducationForms = document.getElementById('id_form-TOTAL_FORMS');
+    let educationFormCount = parseInt(totalEducationForms.value);
+
+    addEducationFormButton.addEventListener('click', function() {
+        const newForm = educationFormsetContainer.children[0].cloneNode(true);
+        const formRegex = RegExp(`form-(\d+)-`, 'g');
+        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${educationFormCount}-`);
+        educationFormsetContainer.appendChild(newForm);
+        totalEducationForms.value = ++educationFormCount;
+    });
+});
+</script>
+{% endblock custom_js %}

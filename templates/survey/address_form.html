@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:shadow-md dark:bg-gray-800 dark:border-gray-700 p-8">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Address Information</h1>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <!-- Correspondence Address -->
+            <div class="p-4 border border-gray-200 rounded-lg dark:border-gray-700 mb-6">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Correspondence Address</h2>
+                {{ corr_address_form.non_field_errors }}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <label for="{{ corr_address_form.flat_no_building.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Flat No, Building</label>
+                        {{ corr_address_form.flat_no_building }}
+                        {% if corr_address_form.flat_no_building.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ corr_address_form.flat_no_building.errors|first }}</p>{% endif %}
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="{{ corr_address_form.street_landmark.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Street, Landmark</label>
+                        {{ corr_address_form.street_landmark }}
+                        {% if corr_address_form.street_landmark.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ corr_address_form.street_landmark.errors|first }}</p>{% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ corr_address_form.country.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
+                        <select name="{{ corr_address_form.country.name }}" id="{{ corr_address_form.country.id_for_label }}" class="{{ text_input_attrs.class }}" hx-get="{% url 'survey:hx_state_select' %}" hx-target="#{{ corr_address_form.state.id_for_label }}" hx-trigger="change">
+                            {% for country in corr_address_form.fields.country.queryset %}
+                            <option value="{{ country.id }}" {% if corr_address_form.initial.country == country.id %}selected{% endif %}>{{ country.name }}</option>
+                            {% endfor %}
+                        </select>
+                        {% if corr_address_form.country.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ corr_address_form.country.errors|first }}</p>{% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ corr_address_form.state.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">State</label>
+                        {{ corr_address_form.state }}
+                        {% if corr_address_form.state.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ corr_address_form.state.errors|first }}</p>{% endif %}
+                    </div>
+                    <div id="corr_district_select">
+                        <label for="{{ corr_address_form.district.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">District</label>
+                        {{ corr_address_form.district }}
+                        {% if corr_address_form.district.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ corr_address_form.district.errors|first }}</p>{% endif %}
+                    </div>
+                    <div id="corr_taluka_select">
+                        <label for="{{ corr_address_form.taluka.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Taluka</label>
+                        {{ corr_address_form.taluka }}
+                        {% if corr_address_form.taluka.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ corr_address_form.taluka.errors|first }}</p>{% endif %}
+                    </div>
+                     <div id="corr_city_select">
+                        <label for="{{ corr_address_form.city.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
+                        {{ corr_address_form.city }}
+                        {% if corr_address_form.city.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ corr_address_form.city.errors|first }}</p>{% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ corr_address_form.pincode.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pincode</label>
+                        {{ corr_address_form.pincode }}
+                        {% if corr_address_form.pincode.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ corr_address_form.pincode.errors|first }}</p>{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Same as Correspondence Checkbox -->
+            <div class="flex items-center mb-6">
+                {{ perm_address_form.is_permanent_same_as_correspondence }}
+                <label for="{{ perm_address_form.is_permanent_same_as_correspondence.id_for_label }}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Permanent address is the same as correspondence</label>
+            </div>
+
+            <!-- Permanent Address -->
+            <div id="permanent-address-container" class="p-4 border border-gray-200 rounded-lg dark:border-gray-700">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Permanent Address</h2>
+                {{ perm_address_form.non_field_errors }}
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <label for="{{ perm_address_form.flat_no_building.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Flat No, Building</label>
+                        {{ perm_address_form.flat_no_building }}
+                        {% if perm_address_form.flat_no_building.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ perm_address_form.flat_no_building.errors|first }}</p>{% endif %}
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="{{ perm_address_form.street_landmark.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Street, Landmark</label>
+                        {{ perm_address_form.street_landmark }}
+                        {% if perm_address_form.street_landmark.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ perm_address_form.street_landmark.errors|first }}</p>{% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ perm_address_form.country.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
+                        <select name="{{ perm_address_form.country.name }}" id="{{ perm_address_form.country.id_for_label }}" class="{{ text_input_attrs.class }}" hx-get="{% url 'survey:hx_state_select' %}" hx-target="#{{ perm_address_form.state.id_for_label }}" hx-trigger="change">
+                            {% for country in perm_address_form.fields.country.queryset %}
+                            <option value="{{ country.id }}" {% if perm_address_form.initial.country == country.id %}selected{% endif %}>{{ country.name }}</option>
+                            {% endfor %}
+                        </select>
+                        {% if perm_address_form.country.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ perm_address_form.country.errors|first }}</p>{% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ perm_address_form.state.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">State</label>
+                        {{ perm_address_form.state }}
+                        {% if perm_address_form.state.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ perm_address_form.state.errors|first }}</p>{% endif %}
+                    </div>
+                    <div id="perm_district_select">
+                        <label for="{{ perm_address_form.district.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">District</label>
+                        {{ perm_address_form.district }}
+                        {% if perm_address_form.district.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ perm_address_form.district.errors|first }}</p>{% endif %}
+                    </div>
+                    <div id="perm_taluka_select">
+                        <label for="{{ perm_address_form.taluka.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Taluka</label>
+                        {{ perm_address_form.taluka }}
+                        {% if perm_address_form.taluka.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ perm_address_form.taluka.errors|first }}</p>{% endif %}
+                    </div>
+                     <div id="perm_city_select">
+                        <label for="{{ perm_address_form.city.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
+                        {{ perm_address_form.city }}
+                        {% if perm_address_form.city.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ perm_address_form.city.errors|first }}</p>{% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ perm_address_form.pincode.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pincode</label>
+                        {{ perm_address_form.pincode }}
+                        {% if perm_address_form.pincode.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ perm_address_form.pincode.errors|first }}</p>{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 flex justify-end">
+                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save and Continue</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block custom_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sameAsCheckbox = document.getElementById('{{ perm_address_form.is_permanent_same_as_correspondence.id_for_label }}');
+    const permanentAddressContainer = document.getElementById('permanent-address-container');
+
+    sameAsCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            permanentAddressContainer.style.display = 'none';
+        } else {
+            permanentAddressContainer.style.display = 'block';
+        }
+    });
+});
+</script>
+{% endblock custom_js %}
+

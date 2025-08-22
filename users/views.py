@@ -5,7 +5,7 @@ from django.contrib import messages
 
 from .models import UserProfile
 from .forms import UsernameChangeForm, AddressForm
-from survey.models import SamajMemberAddress
+from survey.models import SamajMemberAddress, SamajMember
 
 
 @login_required

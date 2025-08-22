@@ -7,6 +7,7 @@ This document outlines the revised plan for creating a modern, responsive, and u
 The new direction avoids tabs in favor of a single, scrollable page. This approach is more intuitive for mobile users and provides a cleaner, more modern aesthetic. The design will be minimalist, focusing on clarity and ease of use. We will use cards to group related information into logical sections.
 
 Key principles of the new plan:
+
 - **Single-Column, Scrollable Layout:** All information will be presented in a single, continuous flow, which is ideal for mobile devices.
 - **Section-Based Cards:** Information will be organized into distinct cards for "Personal Information" and "Social Media Accounts", creating a clear visual hierarchy.
 - **Integrated User Info:** The primary user information (avatar, name) will be presented at the top of the page, not within a card, to give it prominence.

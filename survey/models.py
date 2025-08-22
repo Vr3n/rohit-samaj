@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+
 # Location Models
 
 
@@ -19,7 +20,8 @@ class Country(models.Model):
 class State(models.Model):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(
-        Country, on_delete=models.CASCADE, related_name='states')
+        Country, on_delete=models.CASCADE, related_name="states"
+    )
 
     def __str__(self) -> str:
         return f"{self.name} - {self.country.name}"
@@ -27,8 +29,7 @@ class State(models.Model):
 
 class District(models.Model):
     name = models.CharField(max_length=100)
-    state = models.ForeignKey(
-        State, on_delete=models.CASCADE, related_name='districts')
+    state = models.ForeignKey(State, on_delete=models.CASCADE, related_name="districts")
 
     def __str__(self) -> str:
         return f"{self.name} - {self.state.name}"
@@ -37,7 +38,8 @@ class District(models.Model):
 class Taluka(models.Model):
     name = models.CharField(max_length=100)
     district = models.ForeignKey(
-        District, on_delete=models.CASCADE, related_name='talukas')
+        District, on_delete=models.CASCADE, related_name="talukas"
+    )
 
     def __str__(self) -> str:
         return f"{self.name} - {self.district.name}"
@@ -45,20 +47,22 @@ class Taluka(models.Model):
 
 class City(models.Model):
     name = models.CharField(max_length=100)
-    district = models.ForeignKey(District, on_delete=models.CASCADE,
-                                 related_name='cities', blank=True, null=True)
-    state = models.ForeignKey(State, on_delete=models.CASCADE,
-                              blank=True, null=True)
+    district = models.ForeignKey(
+        District, on_delete=models.CASCADE, related_name="cities", blank=True, null=True
+    )
+    state = models.ForeignKey(State, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self) -> str:
         return f"{self.name}"
+
 
 # Main Samaj Member Model
 
 
 class SamajMember(models.Model):
     user = models.OneToOneField(
-        get_user_model(), null=True, blank=True, on_delete=models.CASCADE)
+        get_user_model(), null=True, blank=True, on_delete=models.CASCADE
+    )
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     father_name = models.CharField(max_length=100, blank=True, null=True)
@@ -66,22 +70,31 @@ class SamajMember(models.Model):
     date_of_birth = models.DateField(blank=True, null=True)
     guardian_name = models.CharField(max_length=100, blank=True, null=True)
 
+    added_by = models.ForeignKey(
+        get_user_model(), null=True, blank=True, on_delete=models.SET_NULL,
+        related_name="added_member"
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     @property
     def full_name(self) -> str:
-        return f"{self.first_name} {self.father_name} {self.mother_name} {self.last_name}"
+        return (
+            f"{self.first_name} {self.father_name} {self.mother_name} {self.last_name}"
+        )
 
     def __str__(self) -> str:
         return self.full_name
+
 
 # Contact Information
 
 
 class SamajMemberMobileNumber(models.Model):
     member = models.ForeignKey(
-        SamajMember, on_delete=models.CASCADE, related_name='mobile_numbers')
+        SamajMember, on_delete=models.CASCADE, related_name="mobile_numbers"
+    )
     # Add validators for digits only
     mobile_number = models.CharField(max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -93,7 +106,8 @@ class SamajMemberMobileNumber(models.Model):
 
 class SamajMemberEmail(models.Model):
     member = models.ForeignKey(
-        SamajMember, on_delete=models.CASCADE, related_name='emails')
+        SamajMember, on_delete=models.CASCADE, related_name="emails"
+    )
     email = models.EmailField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -106,19 +120,29 @@ class SamajMemberEmail(models.Model):
 
 
 class SamajMemberAddress(models.Model):
+    ADDRESS_TYPE_CHOICES = [
+        ('Permanent', 'Permanent'),
+        ('Correspondence', 'Correspondence'),
+    ]
     member = models.ForeignKey(
-        SamajMember, on_delete=models.CASCADE, related_name='addresses')
+        SamajMember, on_delete=models.CASCADE, related_name="addresses"
+    )
+    address_type = models.CharField(
+        max_length=20,
+        choices=ADDRESS_TYPE_CHOICES,
+        default='Permanent' # Default to permanent, but will be set in view
+    )
     flat_no_building = models.CharField(max_length=100)
     street_landmark = models.CharField(max_length=100, blank=True, null=True)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     district = models.ForeignKey(
-        District, on_delete=models.CASCADE, blank=True, null=True)
-    taluka = models.ForeignKey(
-        Taluka, on_delete=models.CASCADE, blank=True, null=True)
-    state = models.ForeignKey(
-        State, on_delete=models.CASCADE, blank=True, null=True)
+        District, on_delete=models.CASCADE, blank=True, null=True
+    )
+    taluka = models.ForeignKey(Taluka, on_delete=models.CASCADE, blank=True, null=True)
+    state = models.ForeignKey(State, on_delete=models.CASCADE, blank=True, null=True)
     country = models.ForeignKey(
-        Country, on_delete=models.CASCADE, blank=True, null=True)
+        Country, on_delete=models.CASCADE, blank=True, null=True
+    )
     pincode = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -129,7 +153,8 @@ class SamajMemberAddress(models.Model):
 
 class SamajMemberEducationalQualification(models.Model):
     member = models.ForeignKey(
-        SamajMember, on_delete=models.CASCADE, related_name='educational_qualifications')
+        SamajMember, on_delete=models.CASCADE, related_name="educational_qualifications"
+    )
     school_name = models.CharField(max_length=100)
     course_name = models.CharField(max_length=100)
     university_name = models.CharField(max_length=100)
@@ -140,34 +165,38 @@ class SamajMemberEducationalQualification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
 # Occupational Details
 
 
 class SamajMemberOccupation(models.Model):
     member = models.ForeignKey(
-        SamajMember, on_delete=models.CASCADE, related_name='occupations')
+        SamajMember, on_delete=models.CASCADE, related_name="occupations"
+    )
     company_name = models.CharField(max_length=100)
     designation = models.CharField(max_length=100)
     occupation_type = models.CharField(
         max_length=20,
         choices=[
-            ('Business', 'Business'),
-            ('Service', 'Service'),
-            ('Self Employed', 'Self Employed'),
-            ('Government Job', 'Government Job')
-        ]
+            ("Business", "Business"),
+            ("Service", "Service"),
+            ("Self Employed", "Self Employed"),
+            ("Government Job", "Government Job"),
+        ],
     )
     occupation_name = models.CharField(max_length=100)
     company_city = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
 # Income Details
 
 
 class SamajMemberIncome(models.Model):
     member = models.ForeignKey(
-        SamajMember, on_delete=models.CASCADE, related_name='income')
+        SamajMember, on_delete=models.CASCADE, related_name="income"
+    )
     annual_income = models.DecimalField(max_digits=10, decimal_places=2)
     earning_members = models.PositiveIntegerField()
     other_members = models.PositiveIntegerField()

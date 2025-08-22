@@ -1,0 +1,6 @@
+<div class="formset-row">
+  {{ form.email.label_tag }} {{ form.email }}
+  {% if form.instance.pk %}
+  {{ form.DELETE }} {{ form.DELETE.label_tag }}
+  {% endif %}
+</div>

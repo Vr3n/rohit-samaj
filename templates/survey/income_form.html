@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:shadow-md dark:bg-gray-800 dark:border-gray-700 p-8">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Income Details</h1>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="{{ form.annual_income.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Annual Income</label>
+                    {{ form.annual_income }}
+                    {% if form.annual_income.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.annual_income.errors|first }}</p>{% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.earning_members.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Earning Members</label>
+                    {{ form.earning_members }}
+                    {% if form.earning_members.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.earning_members.errors|first }}</p>{% endif %}
+                </div>
+                <div class="md:col-span-2">
+                    <label for="{{ form.other_members.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Other Members</p>
+                    {{ form.other_members }}
+                    {% if form.other_members.errors %}<p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.other_members.errors|first }}</p>{% endif %}
+                </div>
+            </div>
+
+            <div class="mt-8 flex justify-end">
+                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save and Finish</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

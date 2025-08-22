@@ -1,0 +1,10 @@
+<c-form.select
+  name="perm_city"
+  label="City"
+  default_selected="Choose a City"
+  required
+>
+  {% for city in cities %}
+    <option value="{{ city.id }}">{{ city.name }}</option>
+  {% endfor %}
+</c-form.select>

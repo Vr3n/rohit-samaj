@@ -13,8 +13,6 @@
         src="{% static 'vendors/alpine.min.js' %}"
     ></script>
 
-    <style></style>
-
     {% compress css %}
       <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     {% endcompress %}
@@ -22,7 +20,7 @@
   <body>
     {% include "partials/_navbar.html" %}
 
-    <main class="container mx-auto p-6">
+    <main class="container mx-auto p-6 mt-16">
       {% block content %} {% endblock content %}
     </main>
 

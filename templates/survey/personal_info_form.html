@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:shadow-md dark:bg-gray-800 dark:border-gray-700 p-8">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Personal Information</h1>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="{{ form.first_name.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.first_name.errors|first }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.last_name.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.last_name.errors|first }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.father_name.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Father's Name</label>
+                    {{ form.father_name }}
+                     {% if form.father_name.errors %}
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.father_name.errors|first }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.mother_name.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mother's Name</label>
+                    {{ form.mother_name }}
+                     {% if form.mother_name.errors %}
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.mother_name.errors|first }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.guardian_name.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Guardian's Name</label>
+                    {{ form.guardian_name }}
+                     {% if form.guardian_name.errors %}
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.guardian_name.errors|first }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.date_of_birth.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
+                    {{ form.date_of_birth }}
+                     {% if form.date_of_birth.errors %}
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.date_of_birth.errors|first }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <hr class="my-8 border-gray-200 dark:border-gray-700">
+
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Contact Information</h2>
+            <p class="mb-4 text-sm text-gray-600 dark:text-gray-400">Please provide at least one mobile number or email address.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="{{ form.mobile_number.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mobile Number</label>
+                    {{ form.mobile_number }}
+                    {% if form.mobile_number.errors %}
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.mobile_number.errors|first }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.alternate_mobile_number.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alternate Mobile Number</label>
+                    {{ form.alternate_mobile_number }}
+                    {% if form.alternate_mobile_number.errors %}
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.alternate_mobile_number.errors|first }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.email.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.email.errors|first }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.alternate_email.id_for_label }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alternate Email</label>
+                    {{ form.alternate_email }}
+                    {% if form.alternate_email.errors %}
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ form.alternate_email.errors|first }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-8 flex justify-end">
+                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save and Continue</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block custom_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const datepickerEl = document.getElementById('{{ form.date_of_birth.id_for_label }}');
+  new Datepicker(datepickerEl, {
+    format: 'dd/mm/yyyy',
+    autohide: true,
+  });
+});
+</script>
+{% endblock custom_js %}

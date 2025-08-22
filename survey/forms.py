@@ -1,237 +1,164 @@
 from django import forms
 from django.core.validators import RegexValidator
+from django.forms import inlineformset_factory
+from django.core.exceptions import ValidationError
 
-from survey.models import (City, Country, District,
-                           Taluka,
-                           SamajMember, State,
-                           SamajMemberMobileNumber, SamajMemberIncome,
-                           SamajMemberEmail,
-                           SamajMemberEducationalQualification,
-                           SamajMemberAddress, SamajMemberOccupation)
+from survey.models import (
+    City, Country, District, Taluka,
+    SamajMember, State,
+    SamajMemberMobileNumber, SamajMemberIncome,
+    SamajMemberEmail,
+    SamajMemberEducationalQualification,
+    SamajMemberAddress, SamajMemberOccupation
+)
+
+# Define common form widget attributes for Flowbite styling
+text_input_attrs = {
+    'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+}
+date_input_attrs = {
+    'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+}
+checkbox_attrs = {
+    'class': 'w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+}
 
 
 class AcceptTermsForm(forms.Form):
-    caste_terms = forms.BooleanField(required=True)
-    accept_terms = forms.BooleanField(required=True)
+    caste_terms = forms.BooleanField(required=True, widget=forms.CheckboxInput(attrs=checkbox_attrs))
+    accept_terms = forms.BooleanField(required=True, widget=forms.CheckboxInput(attrs=checkbox_attrs))
 
 
-class SamajSurveyForm(forms.Form):
-    # Personal Details
-    first_name = forms.CharField(
-        label="First Name", required=True, max_length=100)
-    last_name = forms.CharField(required=True, max_length=100)
-    father_name = forms.CharField(required=False, max_length=100)
-    mother_name = forms.CharField(required=False, max_length=100)
-    guardian_name = forms.CharField(required=False, max_length=250)
-    date_of_birth = forms.DateField()
-
-    # Contact Information
+class SamajMemberPersonalInfoForm(forms.ModelForm):
     mobile_number = forms.CharField(
-        required=True,
         max_length=10,
         min_length=10,
-        validators=[RegexValidator(
-            r'^\d{10}$', 'Enter a valid 10-digit mobile number.')]
-    )
-    email = forms.EmailField(required=False)
-    alternate_mobile_number = forms.CharField(
+        validators=[RegexValidator(r'^\d{10}$', 'Enter a valid 10-digit mobile number.')],
         required=False,
+        widget=forms.TextInput(attrs=text_input_attrs)
+    )
+    alternate_mobile_number = forms.CharField(
         max_length=10,
         min_length=10,
-        validators=[RegexValidator(
-            r'^\d{10}$', 'Enter a valid 10-digit mobile number.')]
+        validators=[RegexValidator(r'^\d{10}$', 'Enter a valid 10-digit mobile number.')],
+        required=False,
+        widget=forms.TextInput(attrs=text_input_attrs)
     )
-    alternate_email = forms.EmailField(required=False)
+    email = forms.EmailField(required=False, widget=forms.EmailInput(attrs=text_input_attrs))
+    alternate_email = forms.EmailField(required=False, widget=forms.EmailInput(attrs=text_input_attrs))
 
-    # Address Details.
-    corr_flat_no_building = forms.CharField(required=False, max_length=100)
-    corr_street_landmark = forms.CharField(required=False, max_length=100)
-    corr_city = forms.CharField(required=True, max_length=100)
-    corr_taluka = forms.CharField(required=True, max_length=100)
-    corr_district = forms.CharField(required=True, max_length=100)
-    corr_taluka = forms.CharField(required=True, max_length=100)
-    corr_state = forms.CharField(required=True, max_length=100)
-    corr_country = forms.CharField(required=True, max_length=100)
-    corr_pincode = forms.CharField(
-        required=True,
-        max_length=6,
-        min_length=6,
-        validators=[RegexValidator(
-            r'^\d{6}$', 'Enter a valid 6-digit pincode.')]
+    class Meta:
+        model = SamajMember
+        fields = [
+            'first_name', 'last_name', 'father_name', 'mother_name',
+            'date_of_birth', 'guardian_name',
+        ]
+        widgets = {
+            'first_name': forms.TextInput(attrs=text_input_attrs),
+            'last_name': forms.TextInput(attrs=text_input_attrs),
+            'father_name': forms.TextInput(attrs=text_input_attrs),
+            'mother_name': forms.TextInput(attrs=text_input_attrs),
+            'guardian_name': forms.TextInput(attrs=text_input_attrs),
+            'date_of_birth': forms.DateInput(attrs={**date_input_attrs, 'datepicker': True, 'datepicker-format': 'dd/mm/yyyy', 'data-datepicker-autohide': 'true'}, format='%d/%m/%Y'),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        mobile_number = cleaned_data.get('mobile_number')
+        email = cleaned_data.get('email')
+
+        if not mobile_number and not email:
+            raise ValidationError("At least one contact method (mobile number or email) must be provided.")
+        return cleaned_data
+
+
+class SamajMemberAddressForm(forms.ModelForm):
+    is_permanent_same_as_correspondence = forms.BooleanField(
+        required=False,
+        label="Same as Correspondence Address",
+        widget=forms.CheckboxInput(attrs=checkbox_attrs)
     )
 
-    # Permanent Address Details.
-    perm_flat_no_building = forms.CharField(required=False, max_length=100)
-    perm_street_landmark = forms.CharField(required=False, max_length=100)
-    perm_city = forms.CharField(required=True, max_length=100)
-    perm_taluka = forms.CharField(required=True, max_length=100)
-    perm_district = forms.CharField(required=True, max_length=100)
-    perm_taluka = forms.CharField(required=True, max_length=100)
-    perm_state = forms.CharField(required=True, max_length=100)
-    perm_country = forms.CharField(required=True, max_length=100)
-    perm_pincode = forms.CharField(
-        required=True,
-        max_length=6,
-        min_length=6,
-        validators=[RegexValidator(
-            r'^\d{6}$', 'Enter a valid 6-digit pincode.')]
-    )
+    class Meta:
+        model = SamajMemberAddress
+        fields = [
+            'flat_no_building', 'street_landmark', 'city', 'district',
+            'taluka', 'state', 'country', 'pincode'
+        ]
+        widgets = {
+            'flat_no_building': forms.TextInput(attrs=text_input_attrs),
+            'street_landmark': forms.TextInput(attrs=text_input_attrs),
+            'pincode': forms.TextInput(attrs=text_input_attrs),
+            'country': forms.Select(attrs=text_input_attrs),
+            'state': forms.Select(attrs=text_input_attrs),
+            'district': forms.Select(attrs=text_input_attrs),
+            'taluka': forms.Select(attrs=text_input_attrs),
+            'city': forms.Select(attrs=text_input_attrs),
+        }
 
-    # Educational Qualification
-    school_name = forms.CharField(required=False, max_length=100)
-    course_name = forms.CharField(required=False, max_length=100)
-    university_name = forms.CharField(required=False, max_length=100)
-    education_city = forms.CharField(required=False, max_length=100)
-    grade = forms.CharField(required=False, max_length=50)
-    percentage = forms.DecimalField(
-        required=False, max_digits=5, decimal_places=2, min_value=0, max_value=100)
-    description = forms.CharField(required=False, max_length=500)
 
-    # Occupational Details
-    company_name = forms.CharField(required=False, max_length=100)
-    designation = forms.CharField(required=False, max_length=100)
-    occupation_type = forms.ChoiceField(choices=[("Business", "Business"), ("Service", "Service"), (
-        "Self Employed", "Self Employed"),
-        ("Government Job", "Government Job"), ("Farmer", "Farmer")],
-        required=False)
-    occupation_name = forms.CharField(required=False, max_length=100)
-    company_city = forms.CharField(required=False, max_length=100)
+class SamajMemberEducationalQualificationForm(forms.ModelForm):
+    class Meta:
+        model = SamajMemberEducationalQualification
+        fields = [
+            'school_name', 'course_name', 'university_name', 'city',
+            'grade', 'percentage', 'description'
+        ]
+        widgets = {
+            'school_name': forms.TextInput(attrs=text_input_attrs),
+            'course_name': forms.TextInput(attrs=text_input_attrs),
+            'university_name': forms.TextInput(attrs=text_input_attrs),
+            'city': forms.TextInput(attrs=text_input_attrs),
+            'grade': forms.TextInput(attrs=text_input_attrs),
+            'percentage': forms.NumberInput(attrs=text_input_attrs),
+            'description': forms.Textarea(attrs={**text_input_attrs, 'rows': 3}),
+        }
 
-    # Income Details
-    annual_income = forms.DecimalField(
-        required=True, max_digits=10, decimal_places=2)
-    earning_members = forms.IntegerField(required=True, min_value=0)
-    other_members = forms.IntegerField(required=True, min_value=0)
+    def clean(self):
+        cleaned_data = super().clean()
+        grade = cleaned_data.get('grade')
+        percentage = cleaned_data.get('percentage')
 
-    def save(self) -> None:
-        # Extracting the cleaned data.
-        cleaned_data = self.cleaned_data
-
-        if self.cleaned_data['corr_country']:
-            corr_country = Country.objects.get(
-                id=cleaned_data['corr_country'])
-
-        if self.cleaned_data['corr_state']:
-            corr_state = State.objects.get(
-                id=cleaned_data['corr_state'])
-
-        if self.cleaned_data['corr_district']:
-            corr_district = District.objects.get(
-                id=cleaned_data['corr_district'])
-
-        if self.cleaned_data['corr_taluka']:
-            corr_taluka = Taluka.objects.get(
-                id=cleaned_data['corr_taluka'])
-
-        if self.cleaned_data['corr_city']:
-            corr_city, _ = City.objects.get_or_create(
-                name=cleaned_data['corr_city'])
-
-        if self.cleaned_data['perm_country']:
-            perm_country = Country.objects.get(
-                id=cleaned_data['perm_country'])
-
-        if self.cleaned_data['perm_state']:
-            perm_state = State.objects.get(
-                id=cleaned_data['perm_state'])
-
-        if self.cleaned_data['perm_district']:
-            perm_district = District.objects.get(
-                id=cleaned_data['perm_district'])
-
-        if self.cleaned_data['perm_taluka']:
-            perm_taluka = Taluka.objects.get(
-                id=cleaned_data['perm_taluka'])
-
-        if self.cleaned_data['perm_city']:
-            perm_city, _ = City.objects.get_or_create(
-                name=cleaned_data['perm_city'])
-
-        # Create the samaj member entry.
-        member = SamajMember.objects.create(
-            first_name=cleaned_data['first_name'],
-            last_name=cleaned_data['last_name'],
-            father_name=cleaned_data['father_name'],
-            mother_name=cleaned_data['mother_name'],
-            guardian_name=cleaned_data['guardian_name'],
-            date_of_birth=cleaned_data['date_of_birth']
-        )
-
-        # Samaj Member Mobile Number.
-        SamajMemberMobileNumber.objects.create(
-            member=member,
-            mobile_number=self.cleaned_data['mobile_number']
-        )
-
-        if self.cleaned_data['alternate_mobile_number']:
-            SamajMemberMobileNumber.objects.create(
-                member=member,
-                mobile_number=self.cleaned_data['alternate_mobile_number']
+        if not grade and not percentage:
+            raise ValidationError(
+                "Either Grade or Percentage must be provided for Educational Qualification."
             )
+        return cleaned_data
 
-        # Samaj Member Email Address.
-        SamajMemberEmail.objects.create(
-            member=member,
-            email=self.cleaned_data['email']
-        )
 
-        if self.cleaned_data['alternate_email']:
-            SamajMemberEmail.objects.create(
-                member=member,
-                email=self.cleaned_data['alternate_email']
-            )
+SamajMemberEducationalQualificationFormSet = inlineformset_factory(
+    SamajMember,
+    SamajMemberEducationalQualification,
+    form=SamajMemberEducationalQualificationForm,
+    extra=1,
+    can_delete=True,
+)
 
-        # Correspondance Address.
-        SamajMemberAddress.objects.create(
-            member=member,
-            flat_no_building=cleaned_data.get('corr_flat_no_building'),
-            street_landmark=cleaned_data.get('corr_street_landmark', ''),
-            city=corr_city,
-            district=corr_district,
-            taluka=corr_taluka,
-            state=corr_state,
-            country=corr_country,
-            pincode=cleaned_data['corr_pincode']
-        )
 
-        # Permanent Address.
-        SamajMemberAddress.objects.create(
-            member=member,
-            flat_no_building=cleaned_data.get('perm_flat_no_building'),
-            street_landmark=cleaned_data.get('perm_street_landmark', ''),
-            city=perm_city,
-            district=perm_district,
-            state=perm_state,
-            taluka=perm_taluka,
-            country=perm_country,
-            pincode=cleaned_data['perm_pincode']
-        )
+class SamajMemberOccupationForm(forms.ModelForm):
+    class Meta:
+        model = SamajMemberOccupation
+        fields = [
+            'company_name', 'designation', 'occupation_type',
+            'occupation_name', 'company_city'
+        ]
+        widgets = {
+            'company_name': forms.TextInput(attrs=text_input_attrs),
+            'designation': forms.TextInput(attrs=text_input_attrs),
+            'occupation_type': forms.Select(attrs=text_input_attrs),
+            'occupation_name': forms.TextInput(attrs=text_input_attrs),
+            'company_city': forms.TextInput(attrs=text_input_attrs),
+        }
 
-        # Educational Qualification.
-        SamajMemberEducationalQualification.objects.create(
-            member=member,
-            school_name=cleaned_data['school_name'],
-            course_name=cleaned_data['course_name'],
-            university_name=cleaned_data['university_name'],
-            city=cleaned_data['education_city'],
-            grade=cleaned_data.get('grade', ''),
-            percentage=cleaned_data.get('percentage', ''),
-            description=cleaned_data.get('description', '')
-        )
 
-        # Income Details.
-        SamajMemberIncome.objects.create(
-            member=member,
-            annual_income=cleaned_data['annual_income'],
-            earning_members=cleaned_data['earning_members'],
-            other_members=cleaned_data['other_members']
-        )
-
-        # samaj member occupation details.
-        SamajMemberOccupation.objects.create(
-            member=member,
-            company_name=cleaned_data['company_name'],
-            designation=cleaned_data['designation'],
-            occupation_type=cleaned_data['occupation_type'],
-            occupation_name=cleaned_data['occupation_name'],
-        )
+class SamajMemberIncomeForm(forms.ModelForm):
+    class Meta:
+        model = SamajMemberIncome
+        fields = [
+            'annual_income', 'earning_members', 'other_members'
+        ]
+        widgets = {
+            'annual_income': forms.NumberInput(attrs=text_input_attrs),
+            'earning_members': forms.NumberInput(attrs=text_input_attrs),
+            'other_members': forms.NumberInput(attrs=text_input_attrs),
+        }

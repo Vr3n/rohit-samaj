@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+<!-- -->
+{% block content %}
+
+<h2 class="text-xl text-center lg:text-2xl">Shree Rohit Seva Sangh, Mumbai</h2>
+
+<section class="flex flex-col gap-4"> {# Increased gap for better spacing #}
+
+  <h1 class="text-3xl font-bold text-center mb-6">Terms and Conditions for Survey</h1> {# Prominent Header #}
+
+  <c-card>
+    <h3 class="text-xl font-semibold mb-4">Purpose of the Survey</h3> {# Stronger heading #}
+    <ul class="list-disc pl-5 space-y-2"> {# Added list-disc and pl-5 for bullet points #}
+      <li>
+        We are conducting this survey to gain deeper insights into the <em>Rohit Samaj Community</em>.
+      </li>
+      <li>
+        Our aim is to understand the professional and educational landscape
+        within our community, especially focusing on the <em>youth</em>.
+      </li>
+      <li>
+        By identifying strengths in various fields and occupations, we hope to
+        build a <strong>supportive network</strong> that will benefit our youth in finding jobs,
+        mentorship, and guidance.
+      </li>
+      <li>
+        This survey will also help us connect older members of the community,
+        fostering connections among those who live in close proximity. Through
+        these efforts, we seek to build a <strong>stronger, more connected community</strong> for
+        mutual growth and support.
+      </li>
+    </ul>
+  </c-card>
+
+  <c-card>
+    <h3 class="text-xl font-semibold mb-4">General Terms and Conditions</h3> {# Stronger heading #}
+    <ul class="list-disc pl-5 space-y-2">
+      <li>
+        This survey is conducted solely for the purpose of gathering information
+        to benefit the <strong>Gujarati Hindu Rohit Samaj Community</strong>.
+      </li>
+      <li>
+        All responses are <em>voluntary</em>, and you may choose to skip questions that
+        you do not wish to answer.
+      </li>
+      <li>
+        Your personal data will be treated with <strong>strict confidentiality</strong> and will
+        not be shared publicly without your explicit consent.
+      </li>
+      <li>
+        Data collected will be used to create insights and connections within
+        the community, potentially aiding in professional and social networking.
+      </li>
+      <li>
+        By participating in this survey, you agree to allow the organizers to
+        use the information provided to develop resources for community
+        betterment.
+      </li>
+      <li>
+        Participants should provide <em>accurate information</em> to ensure the
+        effectiveness of the survey outcomes.
+      </li>
+      <li>
+        The organizers reserve the right to update these terms as needed. Any
+        changes will be communicated accordingly.
+      </li>
+    </ul>
+    <form
+      class="mt-6 space-y-4" {# Increased margin-top and added space-y #}
+      action="{% url 'survey:accept_terms' %}"
+      method="post"
+      x-data="{ 'checked_1': false,'checked': false }"
+    >
+      {% csrf_token %}
+      <div class="mb-4"> {# Increased margin-bottom #}
+        <c-card class="bg-yellow-100/25 border border-yellow-400 p-4 rounded-lg"> {# Added border and padding #}
+          <p class="text-yellow-800 font-medium">
+            <strong>Important:</strong> <em>This survey is exclusively for members
+            of the <strong>Gujarati Hindu Rohit community</strong>. Please do
+            not fill out the form if you are not part of this community.</em>
+          </p>
+        </c-card>
+        <div class="flex items-center mt-2"> {# Added flex and items-center #}
+          <input
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            type="checkbox"
+            name="caste_terms"
+            id="caste_terms"
+            x-model="checked_1"
+          />
+          <label for="caste_terms" class="ml-2 text-gray-700 dark:text-gray-300"> {# Added ml-2 and text color #}
+            I confirm that I am a
+            <strong>Gujarati Hindu Rohit</strong>.
+            <span class="text-red-700">*</span>
+          </label>
+        </div>
+      </div>
+      <div class="mb-4"> {# Increased margin-bottom #}
+        <div class="flex items-center"> {# Added flex and items-center #}
+          <input
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="checkbox"
+            name="accept_terms"
+            id="accept_terms"
+            x-model="checked"
+          />
+          <label for="accept_terms" class="ml-2 text-gray-700 dark:text-gray-300"> {# Added ml-2 and text color #}
+            I have read and accept the terms and conditions.
+            <span class="text-red-700">*</span>
+          </label>
+        </div>
+      </div>
+      <div class="mt-6"> {# Increased margin-top for button #}
+        <span x-show="checked && checked_1">
+          <c-button.primary type="submit">Proceed to Survey</c-button.primary> {# Changed button text #}
+        </span>
+        <span x-show="!checked || !checked_1">
+          <c-button.disabled>Proceed to Survey</c-button.disabled> {# Changed button text #}
+        </span>
+      </div>
+    </form>
+  </c-card>
+</section>
+
+{% endblock content %}
